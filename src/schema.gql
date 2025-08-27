@@ -21,12 +21,12 @@ type Item {
 
 type Query {
   items: [Item!]!
-  item(id: Int!): Item!
+  item(id: ID!): Item!
 }
 
 type Mutation {
   createItem(data: CreateItemInput!): Item!
-  removeItem(id: Int!): Item!
+  removeItem(id: ID!): Item!
 }
 
 input CreateItemInput {

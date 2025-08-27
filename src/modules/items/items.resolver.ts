@@ -1,19 +1,22 @@
-import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { CreateItemInput } from './dto';
 import { Item } from './entities/item.entity';
 import { ItemsService } from './items.service';
-import { CreateItemInput } from './dto';
+import { ParseUUIDPipe } from '@nestjs/common';
 
 @Resolver(() => Item)
 export class ItemsResolver {
   constructor(private readonly itemsService: ItemsService) {}
 
   @Query(() => [Item], { name: 'items' })
-  findAll() {
+  findAll(): Promise<Item[]> {
     return this.itemsService.findAll();
   }
 
   @Query(() => Item, { name: 'item' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  findOne(
+    @Args('id', { type: () => ID }, ParseUUIDPipe) id: string,
+  ): Promise<Item> {
     return this.itemsService.findOne(id);
   }
 
@@ -28,7 +31,7 @@ export class ItemsResolver {
   // }
 
   @Mutation(() => Item)
-  removeItem(@Args('id', { type: () => Int }) id: number) {
+  removeItem(@Args('id', { type: () => ID }, ParseUUIDPipe) id: string) {
     return this.itemsService.remove(id);
   }
 }
