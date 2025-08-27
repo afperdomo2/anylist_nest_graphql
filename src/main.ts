@@ -2,6 +2,7 @@ import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { validationPipeConfig } from './config/validation-pipe.config';
 
 async function bootstrap() {
   const logger = new Logger('Bootstrap');
@@ -10,12 +11,7 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
   const port = configService.get<number>('port', 3000);
 
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-      forbidNonWhitelisted: true,
-    }),
-  );
+  app.useGlobalPipes(new ValidationPipe(validationPipeConfig));
 
   await app.listen(port);
   logger.log(`🚀 Application is running on: http://localhost:${port}`);

@@ -9,9 +9,11 @@ import { GraphQLModule } from '@nestjs/graphql';
 import envConfig from './config/envs/envs.config';
 import { validationSchema } from './config/envs/envs.validation';
 import { ItemsModule } from './modules/items/items.module';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
   imports: [
+    DatabaseModule,
     ConfigModule.forRoot({
       isGlobal: true,
       load: [envConfig],
