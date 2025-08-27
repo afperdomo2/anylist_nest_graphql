@@ -3,8 +3,20 @@
 # ------------------------------------------------------
 
 type Item {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  """ID del item"""
+  id: ID!
+
+  """Nombre del item"""
+  name: String!
+
+  """Descripción del item"""
+  description: String
+
+  """Cantidad del item"""
+  quantity: Float!
+
+  """Unidad de medida del item"""
+  unitOfMeasurement: String!
 }
 
 type Query {
