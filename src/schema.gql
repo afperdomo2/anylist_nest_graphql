@@ -25,7 +25,8 @@ type Query {
 }
 
 type Mutation {
-  createItem(data: CreateItemInput!): Item!
+  createItem(createItemInput: CreateItemInput!): Item!
+  updateItem(updateItemInput: UpdateItemInput!): Item!
   removeItem(id: ID!): Item!
 }
 
@@ -41,4 +42,19 @@ input CreateItemInput {
 
   """Unidad de medida del item"""
   unitOfMeasurement: String!
+}
+
+input UpdateItemInput {
+  """Nombre del item"""
+  name: String
+
+  """Descripción del item"""
+  description: String
+
+  """Cantidad del item"""
+  quantity: Float
+
+  """Unidad de medida del item"""
+  unitOfMeasurement: String
+  id: ID!
 }
