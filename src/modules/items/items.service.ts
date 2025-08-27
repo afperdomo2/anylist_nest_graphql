@@ -11,7 +11,7 @@ interface IItemsService {
   update(data: UpdateItemInput): Promise<Item>;
   findAll(): Promise<Item[]>;
   findOne(id: string): Promise<Item>;
-  // remove(id: string): Promise<void>;
+  remove(id: string): Promise<Item>;
 }
 
 @Injectable()
@@ -45,7 +45,9 @@ export class ItemsService implements IItemsService {
     return item;
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} item`;
+  async remove(id: string) {
+    const item = await this.findOne(id);
+    await this.itemRepository.delete(id);
+    return item;
   }
 }
