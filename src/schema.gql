@@ -25,5 +25,20 @@ type Query {
 }
 
 type Mutation {
+  createItem(data: CreateItemInput!): Item!
   removeItem(id: Int!): Item!
+}
+
+input CreateItemInput {
+  """Nombre del item"""
+  name: String!
+
+  """Descripción del item"""
+  description: String
+
+  """Cantidad del item"""
+  quantity: Float!
+
+  """Unidad de medida del item"""
+  unitOfMeasurement: String!
 }
