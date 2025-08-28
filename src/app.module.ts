@@ -8,8 +8,9 @@ import { GraphQLModule } from '@nestjs/graphql';
 
 import envConfig from './config/envs/envs.config';
 import { validationSchema } from './config/envs/envs.validation';
-import { ItemsModule } from './modules/items/items.module';
 import { DatabaseModule } from './database/database.module';
+import { ItemsModule } from './modules/items/items.module';
+import { UsersModule } from './modules/users/users.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { DatabaseModule } from './database/database.module';
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
     }),
     ItemsModule,
+    UsersModule,
   ],
   controllers: [],
   providers: [],

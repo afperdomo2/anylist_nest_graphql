@@ -19,15 +19,37 @@ type Item {
   unitOfMeasurement: String!
 }
 
+type User {
+  """ID del item"""
+  id: ID!
+
+  """Nombre completo del usuario"""
+  fullName: String!
+
+  """Correo electrónico del usuario"""
+  email: String!
+
+  """Roles del usuario"""
+  roles: [String!]!
+
+  """Estado de actividad del usuario"""
+  isActive: Boolean!
+}
+
 type Query {
   items: [Item!]!
   item(id: ID!): Item!
+  users: [User!]!
+  user(id: String!): User!
 }
 
 type Mutation {
   createItem(createItemInput: CreateItemInput!): Item!
   updateItem(updateItemInput: UpdateItemInput!): Item!
   removeItem(id: ID!): Item!
+  createUser(createUserInput: CreateUserInput!): User!
+  updateUser(updateUserInput: UpdateUserInput!): User!
+  removeUser(id: String!): User!
 }
 
 input CreateItemInput {
@@ -57,4 +79,15 @@ input UpdateItemInput {
   """Unidad de medida del item"""
   unitOfMeasurement: String
   id: ID!
+}
+
+input CreateUserInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateUserInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: String!
 }

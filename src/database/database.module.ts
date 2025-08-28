@@ -18,6 +18,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
           database: configService.get<string>('database.name'),
           autoLoadEntities: true,
           synchronize: true,
+          softDelete: true,
         };
       },
     }),
