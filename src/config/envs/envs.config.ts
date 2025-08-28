@@ -1,6 +1,7 @@
 export default () => ({
   environment: process.env.ENVIRONMENT || 'development',
   port: parseInt(process.env.PORT || '3000', 10),
+  jwtSecret: process.env.JWT_SECRET,
   database: {
     host: process.env.DB_HOST || 'localhost',
     port: parseInt(process.env.DB_PORT || '5432', 10),

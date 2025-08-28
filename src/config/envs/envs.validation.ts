@@ -9,6 +9,9 @@ export const validationSchema = Joi.object({
   // Puerto de la aplicación
   PORT: Joi.number().port().default(3000),
 
+  // Clave secreta para JWT
+  JWT_SECRET: Joi.string().required(),
+
   // Configuración de la base de datos
   DB_HOST: Joi.string().required(),
   DB_PORT: Joi.number().port().default(5432),

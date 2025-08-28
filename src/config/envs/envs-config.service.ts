@@ -13,6 +13,10 @@ export class EnvsConfigService {
     return this.configService.get<number>('port', 3000);
   }
 
+  get jwtSecret(): string {
+    return this.configService.get<string>('jwtSecret')!;
+  }
+
   get databaseConfig() {
     return {
       host: this.configService.get<string>('database.host', 'localhost'),

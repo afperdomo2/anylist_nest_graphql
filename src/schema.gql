@@ -2,23 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Item {
-  """ID del item"""
-  id: ID!
-
-  """Nombre del item"""
-  name: String!
-
-  """Descripción del item"""
-  description: String
-
-  """Cantidad del item"""
-  quantity: Float!
-
-  """Unidad de medida del item"""
-  unitOfMeasurement: String!
-}
-
 type User {
   """ID del item"""
   id: ID!
@@ -36,20 +19,60 @@ type User {
   isActive: Boolean!
 }
 
+type Item {
+  """ID del item"""
+  id: ID!
+
+  """Nombre del item"""
+  name: String!
+
+  """Descripción del item"""
+  description: String
+
+  """Cantidad del item"""
+  quantity: Float!
+
+  """Unidad de medida del item"""
+  unitOfMeasurement: String!
+}
+
 type Query {
-  items: [Item!]!
-  item(id: ID!): Item!
   users: [User!]!
   user(id: String!): User!
+  items: [Item!]!
+  item(id: ID!): Item!
 }
 
 type Mutation {
-  createItem(createItemInput: CreateItemInput!): Item!
-  updateItem(updateItemInput: UpdateItemInput!): Item!
-  removeItem(id: ID!): Item!
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
   removeUser(id: String!): User!
+  createItem(createItemInput: CreateItemInput!): Item!
+  updateItem(updateItemInput: UpdateItemInput!): Item!
+  removeItem(id: ID!): Item!
+}
+
+input CreateUserInput {
+  """Nombre completo del usuario"""
+  fullName: String!
+
+  """Email del usuario"""
+  email: String!
+
+  """Contraseña del usuario"""
+  password: String!
+}
+
+input UpdateUserInput {
+  """Nombre completo del usuario"""
+  fullName: String
+
+  """Email del usuario"""
+  email: String
+
+  """Contraseña del usuario"""
+  password: String
+  id: String!
 }
 
 input CreateItemInput {
@@ -79,15 +102,4 @@ input UpdateItemInput {
   """Unidad de medida del item"""
   unitOfMeasurement: String
   id: ID!
-}
-
-input CreateUserInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
-input UpdateUserInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: String!
 }
