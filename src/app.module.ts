@@ -9,6 +9,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import envConfig from './config/envs/envs.config';
 import { validationSchema } from './config/envs/envs.validation';
 import { DatabaseModule } from './database/database.module';
+import { AuthModule } from './modules/auth/auth.module';
 import { ItemsModule } from './modules/items/items.module';
 import { UsersModule } from './modules/users/users.module';
 
@@ -30,6 +31,7 @@ import { UsersModule } from './modules/users/users.module';
       playground: false, // Deshabilitar playground en producción
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
     }),
+    AuthModule,
     ItemsModule,
     UsersModule,
   ],
