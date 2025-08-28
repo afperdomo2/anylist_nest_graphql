@@ -1,11 +1,17 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+
+import { AuthModule } from 'src/auth/auth.module';
 import { User } from './entities/user.entity';
 import { UsersResolver } from './users.resolver';
 import { UsersService } from './users.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User])],
+  // !forwardRef:
+  // Se usa forwardRef para evitar una dependica circular, UsersModule necesita
+  // AuthModule y AuthModule necesita UsersModule. Solo se necesita usar forwardRef
+  // en uno de los 2 módulos que tienen la dependencia circular.
+  imports: [TypeOrmModule.forFeature([User]), forwardRef(() => AuthModule)],
   providers: [UsersResolver, UsersService],
   exports: [UsersService],
 })
