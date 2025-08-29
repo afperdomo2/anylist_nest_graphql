@@ -1,7 +1,7 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
-import { JwtAuthGuard, Public, Roles, RolesGuard } from 'src/auth';
+import { JwtAuthGuardGql, Public, Roles, RolesGuardGql } from 'src/auth';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { User } from './entities/user.entity';
@@ -9,7 +9,7 @@ import { UserRole } from './enums/user-role.enum';
 import { UsersService } from './users.service';
 
 @Resolver(() => User)
-@UseGuards(JwtAuthGuard, RolesGuard)
+@UseGuards(JwtAuthGuardGql, RolesGuardGql)
 export class UsersResolver {
   constructor(private readonly usersService: UsersService) {}
 

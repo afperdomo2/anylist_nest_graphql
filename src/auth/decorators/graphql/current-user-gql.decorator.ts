@@ -29,7 +29,7 @@ import { User } from 'src/modules/users/entities/user.entity';
  * - Evita repetir lógica de extracción de usuario
  * - Mejora la legibilidad de los resolvers
  */
-export const CurrentUser = createParamDecorator(
+export const CurrentUserGql = createParamDecorator(
   (data: unknown, context: ExecutionContext): User => {
     const ctx = GqlExecutionContext.create(context);
     const request = ctx.getContext<{ req: Request & { user: User } }>().req;

@@ -1,18 +1,18 @@
 import { ParseUUIDPipe, UseGuards } from '@nestjs/common';
 import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { CurrentUser, JwtAuthGuard } from 'src/auth';
+import { CurrentUserGql, JwtAuthGuardGql } from 'src/auth';
 import { User } from '../users/entities/user.entity';
 import { CreateItemInput, UpdateItemInput } from './dto';
 import { Item } from './entities/item.entity';
 import { ItemsService } from './items.service';
 
 @Resolver(() => Item)
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuardGql)
 export class ItemsResolver {
   constructor(private readonly itemsService: ItemsService) {}
 
   @Query(() => [Item], { name: 'items' })
-  findAll(@CurrentUser() user: User): Promise<Item[]> {
+  findAll(@CurrentUserGql() user: User): Promise<Item[]> {
     console.info('🔒 Authenticated user:', user);
     return this.itemsService.findAll();
   }

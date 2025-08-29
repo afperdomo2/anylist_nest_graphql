@@ -9,8 +9,8 @@ import { Reflector } from '@nestjs/core';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { User } from 'src/modules/users/entities/user.entity';
 import { UserRole } from 'src/modules/users/enums/user-role.enum';
-import { ROLES_KEY } from '../decorators/roles.decorator';
-import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
+import { ROLES_KEY } from '../../decorators/roles.decorator';
+import { IS_PUBLIC_KEY } from '../../decorators/public.decorator';
 
 /**
  * Guard que controla el acceso basado en roles de usuario.
@@ -37,7 +37,7 @@ import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
  * asegurar que el usuario esté autenticado antes de verificar roles.
  */
 @Injectable()
-export class RolesGuard implements CanActivate {
+export class RolesGuardGql implements CanActivate {
   constructor(private reflector: Reflector) {}
 
   canActivate(context: ExecutionContext): boolean {
