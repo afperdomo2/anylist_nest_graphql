@@ -1,4 +1,8 @@
-import { createParamDecorator, ExecutionContext } from '@nestjs/common';
+import {
+  createParamDecorator,
+  ExecutionContext,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { User } from 'src/modules/users/entities/user.entity';
 
@@ -29,6 +33,12 @@ export const CurrentUser = createParamDecorator(
   (data: unknown, context: ExecutionContext): User => {
     const ctx = GqlExecutionContext.create(context);
     const request = ctx.getContext<{ req: Request & { user: User } }>().req;
-    return request.user;
+    const user = request.user;
+    if (!user) {
+      throw new InternalServerErrorException(
+        'User not found in request. Make sure that JwtAuthGuard is applied.',
+      );
+    }
+    return user;
   },
 );

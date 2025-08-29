@@ -39,6 +39,9 @@ type Item {
 type Query {
   users: [User!]!
   user(id: String!): User!
+
+  """Obtiene el total de usuarios registrados (endpoint público)"""
+  totalUsers: Float!
   items: [Item!]!
   item(id: ID!): Item!
 }

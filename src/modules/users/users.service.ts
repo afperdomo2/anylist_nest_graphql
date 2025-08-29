@@ -14,6 +14,7 @@ import { UpdateUserInput } from './dto/update-user.input';
 import { User } from './entities/user.entity';
 
 interface IUserService {
+  getTotalUsers(): Promise<number>;
   create(createUserInput: CreateUserInput): Promise<User>;
   findAll(): Promise<User[]>;
   findOne(id: string): Promise<User>;
@@ -27,6 +28,10 @@ export class UsersService implements IUserService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
   ) {}
+
+  async getTotalUsers(): Promise<number> {
+    return await this.userRepository.count();
+  }
 
   async create(data: CreateUserInput) {
     await this.validateEmailAviable(data.email);
