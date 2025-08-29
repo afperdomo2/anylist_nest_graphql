@@ -19,7 +19,7 @@ interface IUserService {
   findOne(id: string): Promise<User>;
   // update(id: string, updateUserInput: UpdateUserInput): Promise<User>;
   // remove(id: string): Promise<User>;
-  findOneByEmail(email: string): Promise<User>;
+  findOneByEmailWithPassword(email: string): Promise<User>;
 }
 
 @Injectable()
@@ -48,20 +48,31 @@ export class UsersService implements IUserService {
     return user;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   update(id: string, updateUserInput: UpdateUserInput) {
     throw new NotImplementedException('Method not implemented.');
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   remove(id: string) {
     throw new NotImplementedException('Method not implemented.');
   }
 
-  async findOneByEmail(email: string) {
-    const userEmail = await this.userRepository.findOneBy({ email });
-    if (!userEmail) {
+  /**
+   * Método específico para autenticación que SÍ incluye el password
+   * Solo debe usarse internamente para validar credenciales
+   */
+  async findOneByEmailWithPassword(email: string): Promise<User> {
+    const user = await this.userRepository
+      .createQueryBuilder('user')
+      .addSelect('user.password')
+      .where('user.email = :email', { email })
+      .getOne();
+
+    if (!user) {
       throw new NotFoundException(`Usuario con email ${email} no encontrado`);
     }
-    return userEmail;
+    return user;
   }
 
   private async validateEmailAviable(email: string) {

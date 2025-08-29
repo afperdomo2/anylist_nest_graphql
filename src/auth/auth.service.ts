@@ -6,7 +6,7 @@ import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/modules/users/users.service';
 import { SingInDto, SingUpDto } from './dto';
 import { AuthResponse } from './interfaces/auth-response.interface';
-import { PayloadToken } from './interfaces/toke.interface';
+import { PayloadToken } from './interfaces/payload-token.interface';
 
 interface IAuthService {
   singUp(singUpDto: SingUpDto): Promise<AuthResponse>;
@@ -29,7 +29,7 @@ export class AuthService implements IAuthService {
 
   async singIn(singInDto: SingInDto) {
     const { email, password } = singInDto;
-    const user = await this.usersService.findOneByEmail(email);
+    const user = await this.usersService.findOneByEmailWithPassword(email);
 
     const isPasswordValid = user.password
       ? await bcrypt.compare(password, user.password)
