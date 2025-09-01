@@ -37,10 +37,10 @@ type Item {
 }
 
 type Query {
-  """Obtiene todos los usuarios (🔒Solo usuarios)"""
+  """Obtiene todos los usuarios (🔒Solo administradores)"""
   users(roles: [UserRole!]! = []): [User!]!
 
-  """Obtiene un usuario por su ID (🔒Solo usuarios)"""
+  """Obtiene un usuario por su ID (🔒Solo administradores)"""
   user(id: String!): User!
 
   """Obtiene el total de usuarios registrados (🌐Público)"""

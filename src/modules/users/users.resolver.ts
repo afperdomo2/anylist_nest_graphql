@@ -12,20 +12,19 @@ import { UsersService } from './users.service';
 export class UsersResolver {
   constructor(private readonly usersService: UsersService) {}
 
-  @Roles(UserRole.User)
+  @Roles(UserRole.Admin)
   @Query(() => [User], {
     name: 'users',
-    description: 'Obtiene todos los usuarios (🔒Solo usuarios)',
+    description: 'Obtiene todos los usuarios (🔒Solo administradores)',
   })
   findAll(@Args() findAllArgs: FindAllArgs) {
-    console.log({ findAllArgs });
     return this.usersService.findAll(findAllArgs);
   }
 
-  @Roles(UserRole.User)
+  @Roles(UserRole.Admin)
   @Query(() => User, {
     name: 'user',
-    description: 'Obtiene un usuario por su ID (🔒Solo usuarios)',
+    description: 'Obtiene un usuario por su ID (🔒Solo administradores)',
   })
   findOne(@Args('id', { type: () => String }) id: string) {
     return this.usersService.findOne(id);
@@ -60,6 +59,7 @@ export class UsersResolver {
   }
 
   // Query público
+  // Los públicos omiten el jwtAuthGuard y el RolesGuard
   @Public()
   @Query(() => Number, {
     name: 'totalUsers',
