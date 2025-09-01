@@ -9,6 +9,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { UserRole } from '../enums/user-role.enum';
 
 @ObjectType()
 @Entity({ name: 'users' })
@@ -32,9 +33,9 @@ export class User {
   @Column({ select: false })
   password: string;
 
-  @Field(() => [String], { description: 'Roles del usuario' })
+  @Field(() => [UserRole], { description: 'Roles del usuario' })
   @Column('text', { array: true, default: ['user'] })
-  roles: string[];
+  roles: UserRole[];
 
   @Field(() => Boolean, { description: 'Estado de actividad del usuario' })
   @Column('boolean', { name: 'is_active', default: true })

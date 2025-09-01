@@ -13,7 +13,7 @@ type User {
   email: String!
 
   """Roles del usuario"""
-  roles: [String!]!
+  roles: [UserRole!]!
 
   """Estado de actividad del usuario"""
   isActive: Boolean!
@@ -24,6 +24,13 @@ type User {
   """Fecha de actualización del usuario"""
   updatedAt: DateTime!
   updatedBy: User
+}
+
+"""Roles de usuario"""
+enum UserRole {
+  User
+  Admin
+  SuperAdmin
 }
 
 """
@@ -63,13 +70,6 @@ type Query {
 
   """Obtiene un item por su ID (🌐Cualquier usuario)"""
   item(id: ID!): Item!
-}
-
-"""Roles de usuario"""
-enum UserRole {
-  User
-  Admin
-  SuperAdmin
 }
 
 type Mutation {
@@ -113,9 +113,14 @@ input UpdateUserInput {
   """Email del usuario"""
   email: String
 
-  """Contraseña del usuario"""
-  password: String
-  id: String!
+  """ID del usuario"""
+  id: ID!
+
+  """Estado de actividad del usuario"""
+  isActive: Boolean
+
+  """Rol del usuario"""
+  roles: [UserRole!]
 }
 
 input CreateItemInput {

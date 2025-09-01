@@ -51,8 +51,11 @@ export class UsersResolver {
     name: 'updateUser',
     description: 'Actualiza un usuario existente (🔒Solo administradores)',
   })
-  updateUser(@Args('updateUserInput') updateUserInput: UpdateUserInput) {
-    return this.usersService.update(updateUserInput.id, updateUserInput);
+  updateUser(
+    @Args('updateUserInput') updateUserInput: UpdateUserInput,
+    @CurrentUserGql() user: User,
+  ) {
+    return this.usersService.update(updateUserInput.id, updateUserInput, user);
   }
 
   @Roles(UserRole.Admin)
@@ -73,7 +76,7 @@ export class UsersResolver {
     @Args('id', { type: () => ID }, ParseUUIDPipe) id: string,
     @CurrentUserGql() user: User,
   ) {
-    return this.usersService.block(id, user.id);
+    return this.usersService.block(id, user);
   }
 
   // Query público

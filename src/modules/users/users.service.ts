@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import {
   ConflictException,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
   NotImplementedException,
 } from '@nestjs/common';
@@ -12,19 +13,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserInput, FindAllArgs, UpdateUserInput } from './dto';
 import { User } from './entities/user.entity';
 
-interface IUserService {
-  getTotalUsers(): Promise<number>;
-  create(createUserInput: CreateUserInput): Promise<User>;
-  findAll(findAllArgs: FindAllArgs): Promise<User[]>;
-  findOne(id: string): Promise<User>;
-  // update(id: string, updateUserInput: UpdateUserInput): Promise<User>;
-  // remove(id: string): Promise<User>;
-  block(id: string, updatedById: string): Promise<User>;
-  findOneByEmailWithPassword(email: string): Promise<User>;
-}
-
 @Injectable()
-export class UsersService implements IUserService {
+export class UsersService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
   ) {}
@@ -33,7 +23,7 @@ export class UsersService implements IUserService {
     return await this.userRepository.count();
   }
 
-  async create(data: CreateUserInput) {
+  async create(data: CreateUserInput): Promise<User> {
     await this.validateEmailAviable(data.email);
     const newUser = this.userRepository.create(data);
     newUser.password = await bcrypt.hash(data.password, 10);
@@ -41,7 +31,7 @@ export class UsersService implements IUserService {
     return newUser;
   }
 
-  async findAll(filters: FindAllArgs) {
+  async findAll(filters: FindAllArgs): Promise<User[]> {
     const { roles } = filters;
     if (roles.length > 0) {
       // Para filtrar arrays en PostgreSQL, usamos QueryBuilder con el operador && (overlap)
@@ -54,7 +44,7 @@ export class UsersService implements IUserService {
     return this.userRepository.find({ relations: { updatedBy: true } });
   }
 
-  async findOne(id: string) {
+  async findOne(id: string): Promise<User> {
     const user = await this.userRepository.findOne({
       where: { id },
       relations: { updatedBy: true },
@@ -65,9 +55,24 @@ export class UsersService implements IUserService {
     return user;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  update(id: string, updateUserInput: UpdateUserInput) {
-    throw new NotImplementedException('Method not implemented.');
+  async update(
+    id: string,
+    updateUserInput: UpdateUserInput,
+    updatedBy: User,
+  ): Promise<User> {
+    try {
+      const user = await this.findOne(id);
+      if (!user) {
+        throw new NotFoundException(`Usuario con id ${id} no encontrado`);
+      }
+      this.userRepository.merge(user, { updatedBy, ...updateUserInput });
+      return await this.userRepository.save(user);
+    } catch (error) {
+      console.error(error);
+      throw new InternalServerErrorException(
+        `Error al actualizar el usuario con id ${id}`,
+      );
+    }
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -75,9 +80,8 @@ export class UsersService implements IUserService {
     throw new NotImplementedException('Method not implemented.');
   }
 
-  async block(id: string, updatedById: string) {
+  async block(id: string, updatedBy: User): Promise<User> {
     const user = await this.findOne(id);
-    const updatedBy = await this.findOne(updatedById);
     user.isActive = false;
     user.updatedBy = updatedBy;
     await this.userRepository.save(user);
@@ -101,7 +105,7 @@ export class UsersService implements IUserService {
     return user;
   }
 
-  private async validateEmailAviable(email: string) {
+  private async validateEmailAviable(email: string): Promise<void> {
     const userEmail = await this.userRepository.findOneBy({ email });
     if (userEmail) {
       throw new ConflictException(`El email ${email} ya está en uso`);
