@@ -37,21 +37,39 @@ type Item {
 }
 
 type Query {
+  """Obtiene todos los usuarios (🔒Solo usuarios)"""
   users: [User!]!
+
+  """Obtiene un usuario por su ID (🔒Solo usuarios)"""
   user(id: String!): User!
 
-  """Obtiene el total de usuarios registrados (endpoint público)"""
+  """Obtiene el total de usuarios registrados (🌐Público)"""
   totalUsers: Float!
+
+  """Obtiene todos los items (🌐Cualquier usuario)"""
   items: [Item!]!
+
+  """Obtiene un item por su ID (🌐Cualquier usuario)"""
   item(id: ID!): Item!
 }
 
 type Mutation {
+  """Crea un nuevo usuario (🔒Solo administradores)"""
   createUser(createUserInput: CreateUserInput!): User!
+
+  """Actualiza un usuario existente (🔒Solo administradores)"""
   updateUser(updateUserInput: UpdateUserInput!): User!
+
+  """Elimina un usuario existente (🔒Solo administradores)"""
   removeUser(id: String!): User!
+
+  """Crea un nuevo item (🌐Cualquier usuario)"""
   createItem(createItemInput: CreateItemInput!): Item!
+
+  """Actualiza un item existente (🌐Cualquier usuario)"""
   updateItem(updateItemInput: UpdateItemInput!): Item!
+
+  """Elimina un item existente (🌐Cualquier usuario)"""
   removeItem(id: ID!): Item!
 }
 
