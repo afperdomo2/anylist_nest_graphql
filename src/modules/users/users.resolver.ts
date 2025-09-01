@@ -1,7 +1,13 @@
-import { UseGuards } from '@nestjs/common';
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { ParseUUIDPipe, UseGuards } from '@nestjs/common';
+import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
 
-import { JwtAuthGuardGql, Public, Roles, RolesGuardGql } from 'src/auth';
+import {
+  CurrentUserGql,
+  JwtAuthGuardGql,
+  Public,
+  Roles,
+  RolesGuardGql,
+} from 'src/auth';
 import { CreateUserInput, FindAllArgs, UpdateUserInput } from './dto';
 import { User } from './entities/user.entity';
 import { UserRole } from './enums/user-role.enum';
@@ -26,7 +32,7 @@ export class UsersResolver {
     name: 'user',
     description: 'Obtiene un usuario por su ID (🔒Solo administradores)',
   })
-  findOne(@Args('id', { type: () => String }) id: string) {
+  findOne(@Args('id', { type: () => ID }, ParseUUIDPipe) id: string) {
     return this.usersService.findOne(id);
   }
 
@@ -54,8 +60,20 @@ export class UsersResolver {
     name: 'removeUser',
     description: 'Elimina un usuario existente (🔒Solo administradores)',
   })
-  removeUser(@Args('id', { type: () => String }) id: string) {
+  removeUser(@Args('id', { type: () => ID }, ParseUUIDPipe) id: string) {
     return this.usersService.remove(id);
+  }
+
+  @Roles(UserRole.Admin)
+  @Mutation(() => User, {
+    name: 'blockUser',
+    description: 'Bloquea un usuario existente (🔒Solo administradores)',
+  })
+  blockUser(
+    @Args('id', { type: () => ID }, ParseUUIDPipe) id: string,
+    @CurrentUserGql() user: User,
+  ) {
+    return this.usersService.block(id, user.id);
   }
 
   // Query público

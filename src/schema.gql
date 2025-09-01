@@ -17,7 +17,19 @@ type User {
 
   """Estado de actividad del usuario"""
   isActive: Boolean!
+
+  """Fecha de creación del usuario"""
+  createdAt: DateTime!
+
+  """Fecha de actualización del usuario"""
+  updatedAt: DateTime!
+  updatedBy: User
 }
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
 
 type Item {
   """ID del item"""
@@ -41,7 +53,7 @@ type Query {
   users(roles: [UserRole!]! = []): [User!]!
 
   """Obtiene un usuario por su ID (🔒Solo administradores)"""
-  user(id: String!): User!
+  user(id: ID!): User!
 
   """Obtiene el total de usuarios registrados (🌐Público)"""
   totalUsers: Float!
@@ -68,7 +80,10 @@ type Mutation {
   updateUser(updateUserInput: UpdateUserInput!): User!
 
   """Elimina un usuario existente (🔒Solo administradores)"""
-  removeUser(id: String!): User!
+  removeUser(id: ID!): User!
+
+  """Bloquea un usuario existente (🔒Solo administradores)"""
+  blockUser(id: ID!): User!
 
   """Crea un nuevo item (🌐Cualquier usuario)"""
   createItem(createItemInput: CreateItemInput!): Item!

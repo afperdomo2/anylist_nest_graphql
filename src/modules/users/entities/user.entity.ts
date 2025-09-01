@@ -1,6 +1,14 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Exclude } from 'class-transformer';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @ObjectType()
 @Entity({ name: 'users' })
@@ -32,6 +40,20 @@ export class User {
   @Column('boolean', { name: 'is_active', default: true })
   isActive: boolean;
 
+  @Field(() => Date, { description: 'Fecha de creación del usuario' })
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt: Date;
+
+  @Field(() => Date, { description: 'Fecha de actualización del usuario' })
+  @UpdateDateColumn({ name: 'updated_at' })
+  updatedAt: Date;
+
+  // Relaciones
+  @Field(() => User, { nullable: true })
+  @ManyToOne(() => User, (user) => user.id, { nullable: true })
+  @JoinColumn({ name: 'updated_by' })
+  updatedBy: User;
+
   /**
    * Método de utilidad para limpiar manualmente el password de la instancia.
    * Útil como medida de seguridad adicional antes de devolver datos.
@@ -41,6 +63,4 @@ export class User {
     const { password, ...userWithoutPassword } = this;
     return userWithoutPassword;
   }
-
-  // TODO: Relaciones...
 }

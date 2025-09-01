@@ -19,6 +19,7 @@ interface IUserService {
   findOne(id: string): Promise<User>;
   // update(id: string, updateUserInput: UpdateUserInput): Promise<User>;
   // remove(id: string): Promise<User>;
+  block(id: string, updatedById: string): Promise<User>;
   findOneByEmailWithPassword(email: string): Promise<User>;
 }
 
@@ -46,14 +47,18 @@ export class UsersService implements IUserService {
       // Para filtrar arrays en PostgreSQL, usamos QueryBuilder con el operador && (overlap)
       return this.userRepository
         .createQueryBuilder('user')
+        .leftJoinAndSelect('user.updatedBy', 'updatedBy')
         .where('user.roles && :roles', { roles })
         .getMany();
     }
-    return this.userRepository.find();
+    return this.userRepository.find({ relations: { updatedBy: true } });
   }
 
   async findOne(id: string) {
-    const user = await this.userRepository.findOneBy({ id });
+    const user = await this.userRepository.findOne({
+      where: { id },
+      relations: { updatedBy: true },
+    });
     if (!user) {
       throw new NotFoundException(`Usuario con id ${id} no encontrado`);
     }
@@ -68,6 +73,15 @@ export class UsersService implements IUserService {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   remove(id: string) {
     throw new NotImplementedException('Method not implemented.');
+  }
+
+  async block(id: string, updatedById: string) {
+    const user = await this.findOne(id);
+    const updatedBy = await this.findOne(updatedById);
+    user.isActive = false;
+    user.updatedBy = updatedBy;
+    await this.userRepository.save(user);
+    return user;
   }
 
   /**
