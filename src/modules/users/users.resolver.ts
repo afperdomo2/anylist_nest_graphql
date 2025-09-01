@@ -2,8 +2,7 @@ import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import { JwtAuthGuardGql, Public, Roles, RolesGuardGql } from 'src/auth';
-import { CreateUserInput } from './dto/create-user.input';
-import { UpdateUserInput } from './dto/update-user.input';
+import { CreateUserInput, FindAllArgs, UpdateUserInput } from './dto';
 import { User } from './entities/user.entity';
 import { UserRole } from './enums/user-role.enum';
 import { UsersService } from './users.service';
@@ -18,8 +17,9 @@ export class UsersResolver {
     name: 'users',
     description: 'Obtiene todos los usuarios (🔒Solo usuarios)',
   })
-  findAll() {
-    return this.usersService.findAll();
+  findAll(@Args() findAllArgs: FindAllArgs) {
+    console.log({ findAllArgs });
+    return this.usersService.findAll(findAllArgs);
   }
 
   @Roles(UserRole.User)

@@ -9,14 +9,13 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
-import { CreateUserInput } from './dto/create-user.input';
-import { UpdateUserInput } from './dto/update-user.input';
+import { CreateUserInput, FindAllArgs, UpdateUserInput } from './dto';
 import { User } from './entities/user.entity';
 
 interface IUserService {
   getTotalUsers(): Promise<number>;
   create(createUserInput: CreateUserInput): Promise<User>;
-  findAll(): Promise<User[]>;
+  findAll(findAllArgs: FindAllArgs): Promise<User[]>;
   findOne(id: string): Promise<User>;
   // update(id: string, updateUserInput: UpdateUserInput): Promise<User>;
   // remove(id: string): Promise<User>;
@@ -41,7 +40,15 @@ export class UsersService implements IUserService {
     return newUser;
   }
 
-  async findAll() {
+  async findAll(filters: FindAllArgs) {
+    const { roles } = filters;
+    if (roles.length > 0) {
+      // Para filtrar arrays en PostgreSQL, usamos QueryBuilder con el operador && (overlap)
+      return this.userRepository
+        .createQueryBuilder('user')
+        .where('user.roles && :roles', { roles })
+        .getMany();
+    }
     return this.userRepository.find();
   }
 
