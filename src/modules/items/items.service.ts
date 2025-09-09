@@ -14,7 +14,8 @@ export class ItemsService {
   ) {}
 
   async create(data: CreateItemInput, user: User): Promise<Item> {
-    const newItem = this.itemRepository.create({ ...data, user });
+    const newItem = this.itemRepository.create(data);
+    newItem.user = user;
     return await this.itemRepository.save(newItem);
   }
 
@@ -32,16 +33,16 @@ export class ItemsService {
     });
   }
 
-  async findOne(id: string): Promise<Item> {
-    const item = await this.itemRepository.findOneBy({ id });
+  async findOne(id: string, user: User): Promise<Item> {
+    const item = await this.itemRepository.findOneBy({ id, userId: user.id });
     if (!item) {
       throw new NotFoundException('Item not found');
     }
     return item;
   }
 
-  async remove(id: string): Promise<Item> {
-    const item = await this.findOne(id);
+  async remove(id: string, user: User): Promise<Item> {
+    const item = await this.findOne(id, user);
     await this.itemRepository.delete(id);
     return item;
   }

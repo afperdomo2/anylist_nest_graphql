@@ -1,4 +1,4 @@
-import { ParseUUIDPipe, UseGuards } from '@nestjs/common';
+import { Logger, ParseUUIDPipe, UseGuards } from '@nestjs/common';
 import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import { CurrentUserGql, JwtAuthGuardGql } from 'src/auth';
@@ -10,6 +10,8 @@ import { ItemsService } from './items.service';
 @Resolver(() => Item)
 @UseGuards(JwtAuthGuardGql)
 export class ItemsResolver {
+  private readonly loggger = new Logger('ItemsResolver');
+
   constructor(private readonly itemsService: ItemsService) {}
 
   @Query(() => [Item], {
@@ -18,7 +20,7 @@ export class ItemsResolver {
       'Obtiene todos los items del usuario autenticado (🔒Usuario autenticado)',
   })
   findAll(@CurrentUserGql() user: User): Promise<Item[]> {
-    console.info('🔒 Authenticated user:', user);
+    this.loggger.log(`🔒 Authenticated user: ${user.id}`);
     return this.itemsService.findAll(user);
   }
 
@@ -28,8 +30,9 @@ export class ItemsResolver {
   })
   findOne(
     @Args('id', { type: () => ID }, ParseUUIDPipe) id: string,
+    @CurrentUserGql() user: User,
   ): Promise<Item> {
-    return this.itemsService.findOne(id);
+    return this.itemsService.findOne(id, user);
   }
 
   @Mutation(() => Item, {
@@ -59,7 +62,8 @@ export class ItemsResolver {
   })
   removeItem(
     @Args('id', { type: () => ID }, ParseUUIDPipe) id: string,
+    @CurrentUserGql() user: User,
   ): Promise<Item> {
-    return this.itemsService.remove(id);
+    return this.itemsService.remove(id, user);
   }
 }
