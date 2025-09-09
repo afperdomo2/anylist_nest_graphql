@@ -2,12 +2,14 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
 import { AuthModule } from './auth/auth.module';
-import envConfig from './config/envs/envs.config';
-import { validationSchema } from './config/envs/envs.validation';
+import envConfig from './envs/envs';
+import { EnvsConfigModule } from './envs/envs.module';
+import { validationSchema } from './envs/validations/envs.validation';
 import { DatabaseModule } from './database/database.module';
 import { GraphqlModule } from './graphql/graphql.module';
 import { ItemsModule } from './modules/items/items.module';
 import { UsersModule } from './modules/users/users.module';
+import { SeedModule } from './seed/seed.module';
 
 @Module({
   imports: [
@@ -18,6 +20,7 @@ import { UsersModule } from './modules/users/users.module';
       validationOptions: { allowUnknown: true, abortEarly: false },
     }),
 
+    EnvsConfigModule,
     DatabaseModule,
     // !Forma síncrona
     //  GraphQLModule.forRoot<ApolloDriverConfig>({
@@ -28,6 +31,7 @@ import { UsersModule } from './modules/users/users.module';
     // }),
     GraphqlModule,
     AuthModule,
+    SeedModule,
 
     ItemsModule,
     UsersModule,

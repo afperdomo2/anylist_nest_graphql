@@ -104,6 +104,9 @@ type Mutation {
 
   """Elimina un item existente (🌐Cualquier usuario)"""
   removeItem(id: ID!): Item!
+
+  """Ejecuta la semilla de datos"""
+  executeSeed: Boolean!
 }
 
 input CreateUserInput {
