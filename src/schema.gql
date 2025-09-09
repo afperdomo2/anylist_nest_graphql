@@ -71,7 +71,9 @@ type Query {
   """Obtiene el total de usuarios registrados (🌐Público)"""
   totalUsers: Float!
 
-  """Obtiene todos los items (🌐Cualquier usuario)"""
+  """
+  Obtiene todos los items del usuario autenticado (🔒Usuario autenticado)
+  """
   items: [Item!]!
 
   """Obtiene un item por su ID (🌐Cualquier usuario)"""

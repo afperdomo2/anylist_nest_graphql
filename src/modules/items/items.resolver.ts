@@ -14,11 +14,12 @@ export class ItemsResolver {
 
   @Query(() => [Item], {
     name: 'items',
-    description: 'Obtiene todos los items (🌐Cualquier usuario)',
+    description:
+      'Obtiene todos los items del usuario autenticado (🔒Usuario autenticado)',
   })
   findAll(@CurrentUserGql() user: User): Promise<Item[]> {
     console.info('🔒 Authenticated user:', user);
-    return this.itemsService.findAll();
+    return this.itemsService.findAll(user);
   }
 
   @Query(() => Item, {
