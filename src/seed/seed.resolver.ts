@@ -1,11 +1,9 @@
 import { Mutation, Resolver } from '@nestjs/graphql';
 
-import { UseGuards } from '@nestjs/common';
-import { JwtAuthGuardGql, RolesGuardGql } from 'src/auth';
 import { SeedService } from './seed.service';
 
 @Resolver()
-@UseGuards(JwtAuthGuardGql, RolesGuardGql)
+// @UseGuards(JwtAuthGuardGql, RolesGuardGql)
 export class SeedResolver {
   constructor(private readonly seedService: SeedService) {}
 
