@@ -30,6 +30,7 @@ export class ItemsService {
   async findAll(user: User): Promise<Item[]> {
     return await this.itemRepository.find({
       where: { userId: user.id },
+      relations: ['user'],
     });
   }
 
@@ -38,6 +39,7 @@ export class ItemsService {
     if (!item) {
       throw new NotFoundException('Item not found');
     }
+    item.user = user;
     return item;
   }
 

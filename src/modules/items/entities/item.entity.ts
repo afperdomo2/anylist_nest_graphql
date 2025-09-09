@@ -38,7 +38,7 @@ export class Item {
 
   @Field(() => User, { description: 'Usuario que creó el item' })
   @Index('idx_item_user_id')
-  @ManyToOne(() => User, (user) => user.items, { eager: true })
+  @ManyToOne(() => User, (user) => user.items)
   @JoinColumn({ name: 'user_id' })
   user: User;
 }

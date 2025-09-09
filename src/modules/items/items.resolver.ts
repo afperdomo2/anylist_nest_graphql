@@ -21,6 +21,7 @@ export class ItemsResolver {
   })
   findAll(@CurrentUserGql() user: User): Promise<Item[]> {
     this.loggger.log(`🔒 Authenticated user: ${user.id}`);
+    this.loggger.log(user);
     return this.itemsService.findAll(user);
   }
 
