@@ -1,5 +1,6 @@
 import { ParseUUIDPipe, UseGuards } from '@nestjs/common';
 import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
+
 import { CurrentUserGql, JwtAuthGuardGql } from 'src/auth';
 import { User } from '../users/entities/user.entity';
 import { CreateItemInput, UpdateItemInput } from './dto';
@@ -36,8 +37,9 @@ export class ItemsResolver {
   })
   createItem(
     @Args('createItemInput') createItemInput: CreateItemInput,
+    @CurrentUserGql() user: User,
   ): Promise<Item> {
-    return this.itemsService.create(createItemInput);
+    return this.itemsService.create(createItemInput, user);
   }
 
   @Mutation(() => Item, {

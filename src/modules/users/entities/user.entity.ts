@@ -6,10 +6,12 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { UserRole } from '../enums/user-role.enum';
+import { Item } from 'src/modules/items/entities/item.entity';
 
 @ObjectType()
 @Entity({ name: 'users' })
@@ -54,6 +56,10 @@ export class User {
   @ManyToOne(() => User, (user) => user.id, { nullable: true })
   @JoinColumn({ name: 'updated_by' })
   updatedBy: User;
+
+  @Field(() => [Item], { description: 'Items creados por el usuario' })
+  @OneToMany(() => Item, (item) => item.user)
+  items: Item[];
 
   /**
    * Método de utilidad para limpiar manualmente el password de la instancia.

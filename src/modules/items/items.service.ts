@@ -3,29 +3,22 @@ import { Repository } from 'typeorm';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
+import { User } from '../users/entities/user.entity';
 import { CreateItemInput, UpdateItemInput } from './dto';
 import { Item } from './entities/item.entity';
 
-interface IItemsService {
-  create(data: CreateItemInput): Promise<Item>;
-  update(data: UpdateItemInput): Promise<Item>;
-  findAll(): Promise<Item[]>;
-  findOne(id: string): Promise<Item>;
-  remove(id: string): Promise<Item>;
-}
-
 @Injectable()
-export class ItemsService implements IItemsService {
+export class ItemsService {
   constructor(
     @InjectRepository(Item) private itemRepository: Repository<Item>,
   ) {}
 
-  async create(data: CreateItemInput) {
-    const newItem = this.itemRepository.create(data);
+  async create(data: CreateItemInput, user: User): Promise<Item> {
+    const newItem = this.itemRepository.create({ ...data, user });
     return await this.itemRepository.save(newItem);
   }
 
-  async update(data: UpdateItemInput) {
+  async update(data: UpdateItemInput): Promise<Item> {
     const item = await this.itemRepository.preload(data);
     if (!item) {
       throw new NotFoundException('Item not found');
@@ -33,11 +26,11 @@ export class ItemsService implements IItemsService {
     return await this.itemRepository.save(item);
   }
 
-  async findAll() {
+  async findAll(): Promise<Item[]> {
     return await this.itemRepository.find();
   }
 
-  async findOne(id: string) {
+  async findOne(id: string): Promise<Item> {
     const item = await this.itemRepository.findOneBy({ id });
     if (!item) {
       throw new NotFoundException('Item not found');
@@ -45,7 +38,7 @@ export class ItemsService implements IItemsService {
     return item;
   }
 
-  async remove(id: string) {
+  async remove(id: string): Promise<Item> {
     const item = await this.findOne(id);
     await this.itemRepository.delete(id);
     return item;

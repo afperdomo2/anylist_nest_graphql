@@ -1,5 +1,13 @@
-import { Field, Float, ID, ObjectType } from '@nestjs/graphql';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { User } from 'src/modules/users/entities/user.entity';
+import {
+  Column,
+  Entity,
+  Index,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @ObjectType()
 @Entity({ name: 'items' })
@@ -16,11 +24,21 @@ export class Item {
   @Column('text', { nullable: true })
   description?: string;
 
-  @Field(() => Float, { description: 'Cantidad del item' })
-  @Column('decimal', { precision: 10, scale: 2 })
-  quantity: number;
+  // @Field(() => Float, { description: 'Cantidad del item' })
+  // @Column('decimal', { precision: 10, scale: 2 })
+  // quantity: number;
 
   @Field(() => String, { description: 'Unidad de medida del item' })
   @Column('varchar', { name: 'unit_of_measurement' })
   unitOfMeasurement: string;
+
+  @Field(() => ID, { description: 'ID del usuario que creó el item' })
+  @Column('uuid', { name: 'user_id' })
+  userId: string;
+
+  @Field(() => User, { description: 'Usuario que creó el item' })
+  @Index('idx_item_user_id')
+  @ManyToOne(() => User, (user) => user.id, { eager: true })
+  @JoinColumn({ name: 'user_id' })
+  user: User;
 }
