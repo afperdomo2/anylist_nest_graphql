@@ -38,10 +38,13 @@ export class UsersService {
       return this.userRepository
         .createQueryBuilder('user')
         .leftJoinAndSelect('user.updatedBy', 'updatedBy')
+        .leftJoinAndSelect('user.items', 'items')
         .where('user.roles && :roles', { roles })
         .getMany();
     }
-    return this.userRepository.find({ relations: { updatedBy: true } });
+    return this.userRepository.find({
+      relations: { updatedBy: true, items: true },
+    });
   }
 
   async findOne(id: string): Promise<User> {

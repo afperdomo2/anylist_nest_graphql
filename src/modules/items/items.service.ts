@@ -47,4 +47,8 @@ export class ItemsService {
     await this.itemRepository.delete(id);
     return item;
   }
+
+  async itemCountByUser(user: User): Promise<number> {
+    return this.itemRepository.count({ where: { userId: user.id } });
+  }
 }

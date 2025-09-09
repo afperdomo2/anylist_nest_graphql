@@ -1,5 +1,14 @@
 import { ParseUUIDPipe, UseGuards } from '@nestjs/common';
-import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
+import {
+  Args,
+  ID,
+  Int,
+  Mutation,
+  Parent,
+  Query,
+  ResolveField,
+  Resolver,
+} from '@nestjs/graphql';
 
 import {
   CurrentUserGql,
@@ -8,6 +17,7 @@ import {
   Roles,
   RolesGuardGql,
 } from 'src/auth';
+import { ItemsService } from '../items/items.service';
 import { CreateUserInput, FindAllArgs, UpdateUserInput } from './dto';
 import { User } from './entities/user.entity';
 import { UserRole } from './enums/user-role.enum';
@@ -16,8 +26,12 @@ import { UsersService } from './users.service';
 @Resolver(() => User)
 @UseGuards(JwtAuthGuardGql, RolesGuardGql)
 export class UsersResolver {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly itemsService: ItemsService,
+  ) {}
 
+  // ! Queries
   @Roles(UserRole.Admin)
   @Query(() => [User], {
     name: 'users',
@@ -36,6 +50,18 @@ export class UsersResolver {
     return this.usersService.findOne(id);
   }
 
+  // SECTION - Query público
+  // Los públicos omiten el jwtAuthGuard y el RolesGuard
+  @Public()
+  @Query(() => Number, {
+    name: 'totalUsers',
+    description: 'Obtiene el total de usuarios registrados (🌐Público)',
+  })
+  async getTotalUsers(): Promise<number> {
+    return this.usersService.getTotalUsers();
+  }
+
+  // ! Mutations
   // Solo administradores pueden crear usuarios
   @Roles(UserRole.Admin)
   @Mutation(() => User, {
@@ -79,14 +105,15 @@ export class UsersResolver {
     return this.usersService.block(id, user);
   }
 
-  // Query público
-  // Los públicos omiten el jwtAuthGuard y el RolesGuard
-  @Public()
-  @Query(() => Number, {
-    name: 'totalUsers',
-    description: 'Obtiene el total de usuarios registrados (🌐Público)',
+  // ! ResolveFields
+  @Roles(UserRole.Admin)
+  @ResolveField(() => Int, {
+    name: 'itemCount',
+    description:
+      'Número de items creados por el usuario (🔒Solo administradores)',
   })
-  async getTotalUsers(): Promise<number> {
-    return this.usersService.getTotalUsers();
+  getUserItemCount(@Parent() user: User) {
+    // return user.items?.length ?? 0; // NOTE: Esta es otra forma si ya tenemos la relación cargada
+    return this.itemsService.itemCountByUser(user);
   }
 }

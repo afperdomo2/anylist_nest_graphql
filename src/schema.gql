@@ -2,26 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Item {
-  """ID del item"""
-  id: ID!
-
-  """Nombre del item"""
-  name: String!
-
-  """Descripción del item"""
-  description: String
-
-  """Unidad de medida del item"""
-  unitOfMeasurement: String!
-
-  """ID del usuario que creó el item"""
-  userId: ID!
-
-  """Usuario que creó el item"""
-  user: User!
-}
-
 type User {
   """ID del item"""
   id: ID!
@@ -47,6 +27,9 @@ type User {
 
   """Items creados por el usuario"""
   items: [Item!]!
+
+  """Número de items creados por el usuario (🔒Solo administradores)"""
+  itemCount: Int!
 }
 
 """Roles de usuario"""
@@ -60,6 +43,26 @@ enum UserRole {
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
+
+type Item {
+  """ID del item"""
+  id: ID!
+
+  """Nombre del item"""
+  name: String!
+
+  """Descripción del item"""
+  description: String
+
+  """Unidad de medida del item"""
+  unitOfMeasurement: String!
+
+  """ID del usuario que creó el item"""
+  userId: ID!
+
+  """Usuario que creó el item"""
+  user: User!
+}
 
 type Query {
   """Obtiene todos los usuarios (🔒Solo administradores)"""

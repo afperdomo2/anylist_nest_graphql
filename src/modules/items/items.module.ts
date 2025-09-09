@@ -13,5 +13,6 @@ import { ItemsService } from './items.service';
   // en uno de los 2 módulos que tienen la dependencia circular.
   imports: [TypeOrmModule.forFeature([Item]), forwardRef(() => AuthModule)],
   providers: [ItemsResolver, ItemsService],
+  exports: [ItemsService],
 })
 export class ItemsModule {}
