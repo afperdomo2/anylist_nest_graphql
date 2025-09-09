@@ -19,11 +19,10 @@ export class ItemsService {
     return await this.itemRepository.save(newItem);
   }
 
-  async update(data: UpdateItemInput): Promise<Item> {
-    const item = await this.itemRepository.preload(data);
-    if (!item) {
-      throw new NotFoundException('Item not found');
-    }
+  async update(data: UpdateItemInput, user: User): Promise<Item> {
+    const { id, ...changes } = data;
+    const item = await this.findOne(id, user);
+    this.itemRepository.merge(item, changes);
     return await this.itemRepository.save(item);
   }
 

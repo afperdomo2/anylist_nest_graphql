@@ -53,8 +53,9 @@ export class ItemsResolver {
   })
   updateItem(
     @Args('updateItemInput') updateItemInput: UpdateItemInput,
+    @CurrentUserGql() user: User,
   ): Promise<Item> {
-    return this.itemsService.update(updateItemInput);
+    return this.itemsService.update(updateItemInput, user);
   }
 
   @Mutation(() => Item, {
