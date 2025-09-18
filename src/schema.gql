@@ -83,6 +83,9 @@ type Query {
 
     """Límite de resultados (por defecto: 10, máximo: 100)"""
     limit: Int! = 10
+
+    """Término de búsqueda (opcional)"""
+    search: String
   ): [Item!]!
 
   """Obtiene un item por su ID (🌐Cualquier usuario)"""

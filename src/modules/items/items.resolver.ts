@@ -2,9 +2,8 @@ import { Logger, ParseUUIDPipe, UseGuards } from '@nestjs/common';
 import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import { CurrentUserGql, JwtAuthGuardGql } from 'src/auth';
-import { PaginationArgs } from 'src/common/dto';
 import { User } from '../users/entities/user.entity';
-import { CreateItemInput, UpdateItemInput } from './dto';
+import { CreateItemInput, FindAllArgs, UpdateItemInput } from './dto';
 import { Item } from './entities/item.entity';
 import { ItemsService } from './items.service';
 
@@ -20,12 +19,9 @@ export class ItemsResolver {
     description:
       'Obtiene todos los items del usuario autenticado (🔒Usuario autenticado)',
   })
-  findAll(
-    @CurrentUserGql() user: User,
-    @Args() paginationArgs: PaginationArgs,
-  ): Promise<Item[]> {
+  findAll(@CurrentUserGql() user: User, @Args() findAllArgs: FindAllArgs) {
     this.loggger.log(`🔒 Authenticated user: ${user.id}`);
-    return this.itemsService.findAll(user, paginationArgs);
+    return this.itemsService.findAll(user, findAllArgs);
   }
 
   @Query(() => Item, {
