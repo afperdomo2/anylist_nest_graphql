@@ -10,6 +10,7 @@ import { GraphqlModule } from './graphql/graphql.module';
 import { ItemsModule } from './modules/items/items.module';
 import { UsersModule } from './modules/users/users.module';
 import { SeedModule } from './seed/seed.module';
+import { CommonModule } from './common/common.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { SeedModule } from './seed/seed.module';
 
     ItemsModule,
     UsersModule,
+    CommonModule,
   ],
   controllers: [],
   providers: [],

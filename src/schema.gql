@@ -77,7 +77,13 @@ type Query {
   """
   Obtiene todos los items del usuario autenticado (🔒Usuario autenticado)
   """
-  items: [Item!]!
+  items(
+    """Número de página (por defecto: 1)"""
+    page: Int! = 1
+
+    """Límite de resultados (por defecto: 10, máximo: 100)"""
+    limit: Int! = 10
+  ): [Item!]!
 
   """Obtiene un item por su ID (🌐Cualquier usuario)"""
   item(id: ID!): Item!
