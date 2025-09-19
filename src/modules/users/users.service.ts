@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
+import { paginate } from 'src/common/utils/pagination.util';
 import { CreateUserInput, FindAllArgs, UpdateUserInput } from './dto';
 import { User } from './entities/user.entity';
 
@@ -31,20 +32,22 @@ export class UsersService {
     return newUser;
   }
 
-  async findAll(filters: FindAllArgs): Promise<User[]> {
-    const { roles } = filters;
+  async findAll(findAllArgs: FindAllArgs): Promise<User[]> {
+    const { search, roles } = findAllArgs;
+    const { skip, take } = paginate(findAllArgs);
+
+    const query = this.userRepository
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.updatedBy', 'updatedBy');
     if (roles.length > 0) {
-      // Para filtrar arrays en PostgreSQL, usamos QueryBuilder con el operador && (overlap)
-      return this.userRepository
-        .createQueryBuilder('user')
-        .leftJoinAndSelect('user.updatedBy', 'updatedBy')
-        .leftJoinAndSelect('user.items', 'items')
-        .where('user.roles && :roles', { roles })
-        .getMany();
+      query.andWhere('user.roles && :roles', { roles });
     }
-    return this.userRepository.find({
-      relations: { updatedBy: true, items: true },
-    });
+    if (search) {
+      query.andWhere('user.fullName ILIKE :search', {
+        search: `%${search}%`,
+      });
+    }
+    return query.skip(skip).take(take).getMany();
   }
 
   async findOne(id: string): Promise<User> {

@@ -75,7 +75,17 @@ type Item {
 
 type Query {
   """Obtiene todos los usuarios (🔒Solo administradores)"""
-  users(roles: [UserRole!]! = []): [User!]!
+  users(
+    """Número de página (por defecto: 1)"""
+    page: Int! = 1
+
+    """Límite de resultados (por defecto: 10, máximo: 100)"""
+    limit: Int! = 10
+
+    """Término de búsqueda (opcional)"""
+    search: String
+    roles: [UserRole!]! = []
+  ): [User!]!
 
   """Obtiene un usuario por su ID (🔒Solo administradores)"""
   user(id: ID!): User!
