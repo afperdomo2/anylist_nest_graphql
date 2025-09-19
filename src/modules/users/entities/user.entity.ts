@@ -57,7 +57,8 @@ export class User {
   @JoinColumn({ name: 'updated_by' })
   updatedBy: User;
 
-  @Field(() => [Item], { description: 'Items creados por el usuario' })
+  // Se deja sin @Field para no exponer en el schema GraphQL
+  // Ya que se accederá a través del resolver de Users
   @OneToMany(() => Item, (item) => item.user)
   items: Item[];
 

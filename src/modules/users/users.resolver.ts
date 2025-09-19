@@ -17,8 +17,14 @@ import {
   Roles,
   RolesGuardGql,
 } from 'src/auth';
+import { FindAllArgs as FindAllItemsArgs } from '../items/dto';
+import { Item } from '../items/entities/item.entity';
 import { ItemsService } from '../items/items.service';
-import { CreateUserInput, FindAllArgs, UpdateUserInput } from './dto';
+import {
+  CreateUserInput,
+  FindAllArgs as FindAllUsersArgs,
+  UpdateUserInput,
+} from './dto';
 import { User } from './entities/user.entity';
 import { UserRole } from './enums/user-role.enum';
 import { UsersService } from './users.service';
@@ -37,7 +43,7 @@ export class UsersResolver {
     name: 'users',
     description: 'Obtiene todos los usuarios (🔒Solo administradores)',
   })
-  findAll(@Args() findAllArgs: FindAllArgs) {
+  findAll(@Args() findAllArgs: FindAllUsersArgs) {
     return this.usersService.findAll(findAllArgs);
   }
 
@@ -112,8 +118,20 @@ export class UsersResolver {
     description:
       'Número de items creados por el usuario (🔒Solo administradores)',
   })
-  getUserItemCount(@Parent() user: User) {
-    // return user.items?.length ?? 0; // NOTE: Esta es otra forma si ya tenemos la relación cargada
+  getUserItemCount(@Parent() user: User): Promise<number> {
+    // return user.items?.length ?? 0; // Esta es otra forma si ya tenemos la relación cargada
     return this.itemsService.itemCountByUser(user);
+  }
+
+  @Roles(UserRole.Admin)
+  @ResolveField(() => [Item], {
+    name: 'items',
+    description: 'Items creados por el usuario (🔒Solo administradores)',
+  })
+  getItemsByUser(
+    @Parent() user: User,
+    @Args() findAllArgs: FindAllItemsArgs,
+  ): Promise<Item[]> {
+    return this.itemsService.findAll(user, findAllArgs);
   }
 }

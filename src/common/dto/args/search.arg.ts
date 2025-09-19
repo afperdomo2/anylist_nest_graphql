@@ -1,4 +1,4 @@
-import { IsOptional, IsString, MinLength } from 'class-validator';
+import { IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
 
 import { ArgsType, Field } from '@nestjs/graphql';
 
@@ -11,5 +11,8 @@ export class SearchArgs {
   @IsOptional()
   @IsString({ message: 'El campo search debe ser una cadena de texto' })
   @MinLength(3, { message: 'El campo search debe tener al menos 3 caracteres' })
+  @MaxLength(50, {
+    message: 'El campo search no puede tener más de 50 caracteres',
+  })
   search?: string;
 }

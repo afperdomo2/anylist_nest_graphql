@@ -25,11 +25,20 @@ type User {
   updatedAt: DateTime!
   updatedBy: User
 
-  """Items creados por el usuario"""
-  items: [Item!]!
-
   """Número de items creados por el usuario (🔒Solo administradores)"""
   itemCount: Int!
+
+  """Items creados por el usuario (🔒Solo administradores)"""
+  items(
+    """Número de página (por defecto: 1)"""
+    page: Int! = 1
+
+    """Límite de resultados (por defecto: 10, máximo: 100)"""
+    limit: Int! = 10
+
+    """Término de búsqueda (opcional)"""
+    search: String
+  ): [Item!]!
 }
 
 """Roles de usuario"""

@@ -34,10 +34,7 @@ export class ItemsService {
     const filterByName = search ? { name: ILike(`%${search}%`) } : {};
 
     return await this.itemRepository.find({
-      where: {
-        userId: user.id,
-        ...filterByName,
-      },
+      where: { userId: user.id, ...filterByName },
       relations: ['user'],
       skip,
       take,
