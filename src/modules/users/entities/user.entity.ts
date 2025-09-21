@@ -1,7 +1,4 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Exclude } from 'class-transformer';
-import { Item } from 'src/modules/items/entities/item.entity';
-import { List } from 'src/modules/lists/entities/list.entity';
 import {
   Column,
   CreateDateColumn,
@@ -12,6 +9,11 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+
+import { Field, ID, ObjectType } from '@nestjs/graphql';
+
+import { Item } from 'src/modules/items/entities/item.entity';
+import { List } from 'src/modules/lists/entities/list.entity';
 import { UserRole } from '../enums/user-role.enum';
 
 @ObjectType()

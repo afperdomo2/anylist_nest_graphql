@@ -1,3 +1,5 @@
+import { Repository } from 'typeorm';
+
 import { Injectable, Logger, MethodNotAllowedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
@@ -6,7 +8,6 @@ import { Item } from 'src/modules/items/entities/item.entity';
 import { ItemsService } from 'src/modules/items/items.service';
 import { User } from 'src/modules/users/entities/user.entity';
 import { UsersService } from 'src/modules/users/users.service';
-import { Repository } from 'typeorm';
 import { SEED_ITEMS, SEED_USERS } from './data/seed-data';
 
 @Injectable()

@@ -1,7 +1,8 @@
 import { Logger, ParseUUIDPipe, UseGuards } from '@nestjs/common';
 import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
 
-import { CurrentUserGql, JwtAuthGuardGql } from 'src/auth';
+import { CurrentUserGql } from 'src/auth/decorators/graphql/current-user-gql.decorator';
+import { JwtAuthGuardGql } from 'src/auth/guards/graphql/jwt-auth-gql.guard';
 import { User } from '../users/entities/user.entity';
 import { CreateItemInput, FindAllArgs, UpdateItemInput } from './dto';
 import { Item } from './entities/item.entity';

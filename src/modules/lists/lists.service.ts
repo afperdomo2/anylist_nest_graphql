@@ -1,10 +1,12 @@
+import { ILike, Repository } from 'typeorm';
+
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ILike, Repository } from 'typeorm';
+
+import { paginate } from 'src/common/utils/pagination.util';
 import { User } from '../users/entities/user.entity';
 import { CreateListInput, FindAllListsArg, UpdateListInput } from './dto';
 import { List } from './entities/list.entity';
-import { paginate } from 'src/common/utils/pagination.util';
 
 @Injectable()
 export class ListsService {

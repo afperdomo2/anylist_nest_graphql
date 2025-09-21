@@ -7,10 +7,11 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { GqlExecutionContext } from '@nestjs/graphql';
+
 import { User } from 'src/modules/users/entities/user.entity';
 import { UserRole } from 'src/modules/users/enums/user-role.enum';
-import { ROLES_KEY } from '../../decorators/roles.decorator';
 import { IS_PUBLIC_KEY } from '../../decorators/public.decorator';
+import { ROLES_KEY } from '../../decorators/roles.decorator';
 
 /**
  * Guard que controla el acceso basado en roles de usuario.

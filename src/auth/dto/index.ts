@@ -1,2 +1,2 @@
-export * from './sing-in.dto';
-export * from './sing-up.dto';
+export * from './sign-in.dto';
+export * from './sign-up.dto';

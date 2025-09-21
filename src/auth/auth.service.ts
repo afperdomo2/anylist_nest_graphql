@@ -4,31 +4,26 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
 import { UsersService } from 'src/modules/users/users.service';
-import { SingInDto, SingUpDto } from './dto';
+import { SignInDto, SignUpDto } from './dto';
 import { AuthResponse } from './interfaces/auth-response.interface';
 import { PayloadToken } from './interfaces/payload-token.interface';
 
-interface IAuthService {
-  singUp(singUpDto: SingUpDto): Promise<AuthResponse>;
-  singIn(singInDto: SingInDto): Promise<AuthResponse>;
-}
-
 @Injectable()
-export class AuthService implements IAuthService {
+export class AuthService {
   constructor(
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
   ) {}
 
-  async singUp(singUpDto: SingUpDto) {
-    const user = await this.usersService.create(singUpDto);
+  async signUp(signUpDto: SignUpDto): Promise<AuthResponse> {
+    const user = await this.usersService.create(signUpDto);
     const payload: PayloadToken = { sub: user.id, roles: user.roles };
     const accessToken = await this.jwtService.signAsync(payload);
     return { accessToken, user };
   }
 
-  async singIn(singInDto: SingInDto) {
-    const { email, password } = singInDto;
+  async signIn(signInDto: SignInDto): Promise<AuthResponse> {
+    const { email, password } = signInDto;
     const user = await this.usersService.findOneByEmailWithPassword(email);
 
     const isPasswordValid = user.password

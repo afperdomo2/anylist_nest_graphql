@@ -2,16 +2,16 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
 import { AuthModule } from './auth/auth.module';
+import { CommonModule } from './common/common.module';
+import { DatabaseModule } from './database/database.module';
 import envConfig from './envs/envs';
 import { EnvsConfigModule } from './envs/envs.module';
 import { validationSchema } from './envs/validations/envs.validation';
-import { DatabaseModule } from './database/database.module';
 import { GraphqlModule } from './graphql/graphql.module';
 import { ItemsModule } from './modules/items/items.module';
+import { ListsModule } from './modules/lists/lists.module';
 import { UsersModule } from './modules/users/users.module';
 import { SeedModule } from './seed/seed.module';
-import { CommonModule } from './common/common.module';
-import { ListsModule } from './modules/lists/lists.module';
 
 @Module({
   imports: [

@@ -1,2 +1,2 @@
-export { PaginationArgs } from './args/pagination.arg';
-export { SearchArgs } from './args/search.arg';
+export * from './args/pagination.arg';
+export * from './args/search.arg';

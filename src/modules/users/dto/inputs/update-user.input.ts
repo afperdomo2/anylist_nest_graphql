@@ -1,4 +1,3 @@
-import { Field, ID, InputType, OmitType, PartialType } from '@nestjs/graphql';
 import {
   IsArray,
   IsBoolean,
@@ -6,6 +5,9 @@ import {
   IsOptional,
   IsUUID,
 } from 'class-validator';
+
+import { Field, ID, InputType, OmitType, PartialType } from '@nestjs/graphql';
+
 import { UserRole } from '../../enums/user-role.enum';
 import { CreateUserInput } from './create-user.input';
 

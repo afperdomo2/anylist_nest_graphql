@@ -1,3 +1,3 @@
-export { FindAllListsArg } from './args/find-all-lists.arg';
-export { CreateListInput } from './input/create-list.input';
-export { UpdateListInput } from './input/update-list.input';
+export * from './args/find-all-lists.arg';
+export * from './input/create-list.input';
+export * from './input/update-list.input';

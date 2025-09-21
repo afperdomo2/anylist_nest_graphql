@@ -6,7 +6,7 @@ import {
   IsStrongPassword,
 } from 'class-validator';
 
-export class SingUpDto {
+export class SignUpDto {
   @ApiProperty({
     description: 'El nombre completo del usuario',
     example: 'Juan Perez',
