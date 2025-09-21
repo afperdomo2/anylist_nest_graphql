@@ -53,6 +53,21 @@ type User {
     """Término de búsqueda (opcional)"""
     search: String
   ): [Item!]!
+
+  """Número de listas creadas por el usuario (🔒Solo administradores)"""
+  listCount: Int!
+
+  """Listas creadas por el usuario (🔒Solo administradores)"""
+  lists(
+    """Número de página (por defecto: 1)"""
+    page: Int! = 1
+
+    """Límite de resultados (por defecto: 10, máximo: 100)"""
+    limit: Int! = 10
+
+    """Término de búsqueda (opcional)"""
+    search: String
+  ): [List!]!
 }
 
 """Roles de usuario"""
@@ -164,9 +179,6 @@ type Mutation {
   """Elimina un item existente (🌐Cualquier usuario)"""
   removeItem(id: ID!): Item!
 
-  """Ejecuta la semilla de datos"""
-  executeSeed: Boolean!
-
   """Crea una nueva lista (🔒Usuario autenticado)"""
   createList(createListInput: CreateListInput!): List!
 
@@ -175,6 +187,9 @@ type Mutation {
 
   """Elimina una lista (🔒Usuario autenticado)"""
   removeList(id: ID!): List!
+
+  """Ejecuta la semilla de datos"""
+  executeSeed: Boolean!
 }
 
 input CreateUserInput {

@@ -15,6 +15,7 @@ export class ItemsResolver {
 
   constructor(private readonly itemsService: ItemsService) {}
 
+  // Queries
   @Query(() => [Item], {
     name: 'items',
     description:
@@ -36,6 +37,7 @@ export class ItemsResolver {
     return this.itemsService.findOne(id, user);
   }
 
+  // Mutations
   @Mutation(() => Item, {
     name: 'createItem',
     description: 'Crea un nuevo item (🌐Cualquier usuario)',

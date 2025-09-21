@@ -4,7 +4,7 @@ import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CurrentUserGql } from 'src/auth/decorators/graphql/current-user-gql.decorator';
 import { JwtAuthGuardGql } from 'src/auth/guards/graphql/jwt-auth-gql.guard';
 import { User } from '../users/entities/user.entity';
-import { CreateListInput, FindAllListsArg, UpdateListInput } from './dto';
+import { CreateListInput, FindAllListsArgs, UpdateListInput } from './dto';
 import { List } from './entities/list.entity';
 import { ListsService } from './lists.service';
 
@@ -19,7 +19,7 @@ export class ListsResolver {
     description:
       'Obtiene todas las listas del usuario autenticado (🔒Usuario autenticado)',
   })
-  findAll(@CurrentUserGql() user: User, @Args() findAllArgs: FindAllListsArg) {
+  findAll(@CurrentUserGql() user: User, @Args() findAllArgs: FindAllListsArgs) {
     return this.listsService.findAll(user, findAllArgs);
   }
 

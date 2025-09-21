@@ -18,10 +18,13 @@ import { RolesGuardGql } from 'src/auth/guards/graphql/roles.guard-gql.guard';
 import { FindAllItemsArgs } from '../items/dto';
 import { Item } from '../items/entities/item.entity';
 import { ItemsService } from '../items/items.service';
+import { FindAllListsArgs } from '../lists/dto';
+import { ListsService } from '../lists/lists.service';
 import { CreateUserInput, FindAllUsersArgs, UpdateUserInput } from './dto';
 import { User } from './entities/user.entity';
 import { UserRole } from './enums/user-role.enum';
 import { UsersService } from './users.service';
+import { List } from '../lists/entities/list.entity';
 
 @Resolver(() => User)
 @UseGuards(JwtAuthGuardGql, RolesGuardGql)
@@ -29,6 +32,7 @@ export class UsersResolver {
   constructor(
     private readonly usersService: UsersService,
     private readonly itemsService: ItemsService,
+    private readonly listsService: ListsService,
   ) {}
 
   // ! Queries
@@ -37,8 +41,8 @@ export class UsersResolver {
     name: 'users',
     description: 'Obtiene todos los usuarios (🔒Solo administradores)',
   })
-  findAll(@Args() findAllArgs: FindAllUsersArgs) {
-    return this.usersService.findAll(findAllArgs);
+  findAll(@Args() findAllUsersArgs: FindAllUsersArgs) {
+    return this.usersService.findAll(findAllUsersArgs);
   }
 
   @Roles(UserRole.Admin)
@@ -124,8 +128,30 @@ export class UsersResolver {
   })
   getItemsByUser(
     @Parent() user: User,
-    @Args() findAllArgs: FindAllItemsArgs,
+    @Args() findAllItemsArgs: FindAllItemsArgs,
   ): Promise<Item[]> {
-    return this.itemsService.findAll(user, findAllArgs);
+    return this.itemsService.findAll(user, findAllItemsArgs);
+  }
+
+  @Roles(UserRole.Admin)
+  @ResolveField(() => Int, {
+    name: 'listCount',
+    description:
+      'Número de listas creadas por el usuario (🔒Solo administradores)',
+  })
+  getUserListCount(@Parent() user: User): Promise<number> {
+    return this.listsService.itemCountByUser(user);
+  }
+
+  @Roles(UserRole.Admin)
+  @ResolveField(() => [List], {
+    name: 'lists',
+    description: 'Listas creadas por el usuario (🔒Solo administradores)',
+  })
+  getListsByUser(
+    @Parent() user: User,
+    @Args() findAllListsArgs: FindAllListsArgs,
+  ): Promise<List[]> {
+    return this.listsService.findAll(user, findAllListsArgs);
   }
 }

@@ -5,7 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 import { paginate } from 'src/common/utils/pagination.util';
 import { User } from '../users/entities/user.entity';
-import { CreateListInput, FindAllListsArg, UpdateListInput } from './dto';
+import { CreateListInput, FindAllListsArgs, UpdateListInput } from './dto';
 import { List } from './entities/list.entity';
 
 @Injectable()
@@ -27,7 +27,7 @@ export class ListsService {
     return await this.listRepository.save(list);
   }
 
-  async findAll(user: User, findAllArgs: FindAllListsArg) {
+  async findAll(user: User, findAllArgs: FindAllListsArgs) {
     const { search } = findAllArgs;
     const { skip, take } = paginate(findAllArgs);
 
@@ -35,6 +35,7 @@ export class ListsService {
 
     return await this.listRepository.find({
       where: { userId: user.id, ...filterByName },
+      relations: ['user'],
       skip,
       take,
     });
@@ -53,5 +54,9 @@ export class ListsService {
     const list = await this.findOne(id, user);
     await this.listRepository.delete(id);
     return list;
+  }
+
+  itemCountByUser(user: User): Promise<number> {
+    return this.listRepository.count({ where: { userId: user.id } });
   }
 }
