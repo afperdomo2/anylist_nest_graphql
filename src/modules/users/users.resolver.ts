@@ -15,14 +15,10 @@ import { Public } from 'src/auth/decorators/public.decorator';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { JwtAuthGuardGql } from 'src/auth/guards/graphql/jwt-auth-gql.guard';
 import { RolesGuardGql } from 'src/auth/guards/graphql/roles.guard-gql.guard';
-import { FindAllArgs as FindAllItemsArgs } from '../items/dto';
+import { FindAllItemsArgs } from '../items/dto';
 import { Item } from '../items/entities/item.entity';
 import { ItemsService } from '../items/items.service';
-import {
-  CreateUserInput,
-  FindAllArgs as FindAllUsersArgs,
-  UpdateUserInput,
-} from './dto';
+import { CreateUserInput, FindAllUsersArgs, UpdateUserInput } from './dto';
 import { User } from './entities/user.entity';
 import { UserRole } from './enums/user-role.enum';
 import { UsersService } from './users.service';

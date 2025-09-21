@@ -6,7 +6,10 @@ import { PaginationArgs, SearchArgs } from 'src/common/dto';
 import { UserRole } from '../../enums/user-role.enum';
 
 @ArgsType()
-export class FindAllArgs extends IntersectionType(PaginationArgs, SearchArgs) {
+export class FindAllUsersArgs extends IntersectionType(
+  PaginationArgs,
+  SearchArgs,
+) {
   @Field(() => [UserRole], { defaultValue: [] })
   @IsArray()
   roles: UserRole[] = [];

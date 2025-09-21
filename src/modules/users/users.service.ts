@@ -11,7 +11,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { paginate } from 'src/common/utils/pagination.util';
-import { CreateUserInput, FindAllArgs, UpdateUserInput } from './dto';
+import { CreateUserInput, FindAllUsersArgs, UpdateUserInput } from './dto';
 import { User } from './entities/user.entity';
 
 @Injectable()
@@ -32,7 +32,7 @@ export class UsersService {
     return newUser;
   }
 
-  async findAll(findAllArgs: FindAllArgs): Promise<User[]> {
+  async findAll(findAllArgs: FindAllUsersArgs): Promise<User[]> {
     const { search, roles } = findAllArgs;
     const { skip, take } = paginate(findAllArgs);
 
