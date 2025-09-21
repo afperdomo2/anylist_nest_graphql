@@ -11,6 +11,7 @@ import { ItemsModule } from './modules/items/items.module';
 import { UsersModule } from './modules/users/users.module';
 import { SeedModule } from './seed/seed.module';
 import { CommonModule } from './common/common.module';
+import { ListsModule } from './modules/lists/lists.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { CommonModule } from './common/common.module';
     ItemsModule,
     UsersModule,
     CommonModule,
+    ListsModule,
   ],
   controllers: [],
   providers: [],

@@ -2,6 +2,20 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type List {
+  """ID de la lista"""
+  id: ID!
+
+  """Nombre de la lista"""
+  name: String!
+
+  """Descripción de la lista"""
+  userId: String
+
+  """Usuario que creó la lista"""
+  user: User!
+}
+
 type User {
   """ID del item"""
   id: ID!
@@ -109,6 +123,23 @@ type Query {
 
   """Obtiene un item por su ID (🌐Cualquier usuario)"""
   item(id: ID!): Item!
+
+  """
+  Obtiene todas las listas del usuario autenticado (🔒Usuario autenticado)
+  """
+  lists(
+    """Número de página (por defecto: 1)"""
+    page: Int! = 1
+
+    """Límite de resultados (por defecto: 10, máximo: 100)"""
+    limit: Int! = 10
+
+    """Término de búsqueda (opcional)"""
+    search: String
+  ): [List!]!
+
+  """Obtiene una lista por su ID (🔒Usuario autenticado)"""
+  list(id: ID!): List!
 }
 
 type Mutation {
@@ -135,6 +166,15 @@ type Mutation {
 
   """Ejecuta la semilla de datos"""
   executeSeed: Boolean!
+
+  """Crea una nueva lista (🔒Usuario autenticado)"""
+  createList(createListInput: CreateListInput!): List!
+
+  """Actualiza una lista (🔒Usuario autenticado)"""
+  updateList(updateListInput: UpdateListInput!): List!
+
+  """Elimina una lista (🔒Usuario autenticado)"""
+  removeList(id: ID!): List!
 }
 
 input CreateUserInput {
@@ -185,5 +225,16 @@ input UpdateItemInput {
 
   """Unidad de medida del item"""
   unitOfMeasurement: String
+  id: ID!
+}
+
+input CreateListInput {
+  """Nombre de la lista"""
+  name: String!
+}
+
+input UpdateListInput {
+  """Nombre de la lista"""
+  name: String
   id: ID!
 }

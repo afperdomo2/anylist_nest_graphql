@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AuthModule } from 'src/auth/auth.module';
 import { ItemsModule } from '../items/items.module';
+import { List } from '../lists/entities/list.entity';
 import { User } from './entities/user.entity';
 import { UsersResolver } from './users.resolver';
 import { UsersService } from './users.service';
@@ -13,7 +14,7 @@ import { UsersService } from './users.service';
   // AuthModule y AuthModule necesita UsersModule. Solo se necesita usar forwardRef
   // en uno de los 2 módulos que tienen la dependencia circular.
   imports: [
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([User, List]),
     forwardRef(() => AuthModule),
     ItemsModule,
   ],

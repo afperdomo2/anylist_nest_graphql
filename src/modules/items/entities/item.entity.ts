@@ -33,11 +33,12 @@ export class Item {
   unitOfMeasurement: string;
 
   @Field(() => ID, { description: 'ID del usuario que creó el item' })
+  @Index('idx_item_user_id')
   @Column('uuid', { name: 'user_id' })
   userId: string;
 
+  // Relaciones
   @Field(() => User, { description: 'Usuario que creó el item' })
-  @Index('idx_item_user_id')
   @ManyToOne(() => User, (user) => user.items)
   @JoinColumn({ name: 'user_id' })
   user: User;

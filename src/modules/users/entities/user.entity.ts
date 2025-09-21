@@ -1,5 +1,7 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Exclude } from 'class-transformer';
+import { Item } from 'src/modules/items/entities/item.entity';
+import { List } from 'src/modules/lists/entities/list.entity';
 import {
   Column,
   CreateDateColumn,
@@ -11,7 +13,6 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { UserRole } from '../enums/user-role.enum';
-import { Item } from 'src/modules/items/entities/item.entity';
 
 @ObjectType()
 @Entity({ name: 'users' })
@@ -61,6 +62,9 @@ export class User {
   // Ya que se accederá a través del resolver de Users
   @OneToMany(() => Item, (item) => item.user)
   items: Item[];
+
+  @OneToMany(() => List, (list) => list.user)
+  lists: List[];
 
   /**
    * Método de utilidad para limpiar manualmente el password de la instancia.
