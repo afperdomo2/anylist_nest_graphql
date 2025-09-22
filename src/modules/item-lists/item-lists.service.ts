@@ -7,6 +7,9 @@ import {
 } from '@nestjs/common';
 
 import { InjectRepository } from '@nestjs/typeorm';
+import { PaginationArgs } from 'src/common/dto';
+import { paginate } from 'src/common/utils/pagination.util';
+import { List } from '../lists/entities/list.entity';
 import { ListsService } from '../lists/lists.service';
 import { User } from '../users/entities/user.entity';
 import { CreateItemListInput, UpdateItemListInput } from './dto';
@@ -40,8 +43,17 @@ export class ItemListsService {
     }
   }
 
-  findAll() {
-    return `This action returns all itemLists`;
+  findAllByList(
+    list: List,
+    paginationArgs: PaginationArgs,
+  ): Promise<ItemList[]> {
+    const { skip, take } = paginate(paginationArgs);
+    return this.itemListRepository.find({
+      where: { listId: list.id },
+      relations: ['item', 'list'],
+      skip,
+      take,
+    });
   }
 
   findOne(id: number) {
@@ -63,5 +75,9 @@ export class ItemListsService {
       itemId,
     });
     return !!itemList;
+  }
+
+  async getListItemCount(list: List): Promise<number> {
+    return this.itemListRepository.count({ where: { listId: list.id } });
   }
 }

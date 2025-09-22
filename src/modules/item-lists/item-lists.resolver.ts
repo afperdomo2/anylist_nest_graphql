@@ -13,18 +13,13 @@ import { ItemListsService } from './item-lists.service';
 export class ItemListsResolver {
   constructor(private readonly itemListsService: ItemListsService) {}
 
-  // Queries
-  @Query(() => [ItemList], { name: 'itemLists' })
-  findAll() {
-    return this.itemListsService.findAll();
-  }
-
+  // ! Queries
   @Query(() => ItemList, { name: 'itemList' })
   findOne(@Args('id', { type: () => Int }) id: number) {
     return this.itemListsService.findOne(id);
   }
 
-  // Mutations
+  // ! Mutations
   @Mutation(() => ItemList, {
     name: 'createItemList',
     description: 'Crea un nuevo itemList',

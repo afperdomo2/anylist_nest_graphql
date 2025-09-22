@@ -80,6 +80,18 @@ type List {
 
   """Usuario que creó la lista"""
   user: User!
+
+  """Número de items creados por el usuario (🔒Solo administradores)"""
+  itemCount: Int!
+
+  """Items asociados a la lista (🔒Usuario autenticado)"""
+  items(
+    """Número de página (por defecto: 1)"""
+    page: Int! = 1
+
+    """Límite de resultados (por defecto: 10, máximo: 100)"""
+    limit: Int! = 10
+  ): [ItemList!]!
 }
 
 type ItemList {
@@ -178,7 +190,6 @@ type Query {
 
   """Obtiene una lista por su ID (🔒Usuario autenticado)"""
   list(id: ID!): List!
-  itemLists: [ItemList!]!
   itemList(id: Int!): ItemList!
 }
 
