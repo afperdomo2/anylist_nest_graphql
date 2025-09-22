@@ -6,7 +6,7 @@ import { CreateItemInput } from './create-item.input';
 
 @InputType()
 export class UpdateItemInput extends PartialType(CreateItemInput) {
-  @Field(() => ID)
+  @Field(() => ID, { description: 'ID del item a actualizar' })
   @IsUUID()
   @IsNotEmpty()
   id: string;

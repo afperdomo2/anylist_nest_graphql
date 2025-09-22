@@ -15,7 +15,7 @@ import { CreateUserInput } from './create-user.input';
 export class UpdateUserInput extends PartialType(
   OmitType(CreateUserInput, ['password']),
 ) {
-  @Field(() => ID, { description: 'ID del usuario' })
+  @Field(() => ID, { description: 'ID del usuario a actualizar' })
   @IsUUID()
   @IsNotEmpty()
   id: string;

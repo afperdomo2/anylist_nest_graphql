@@ -56,7 +56,15 @@ export class ListsService {
     return list;
   }
 
-  itemCountByUser(user: User): Promise<number> {
+  async itemCountByUser(user: User): Promise<number> {
     return this.listRepository.count({ where: { userId: user.id } });
+  }
+
+  async isUserOwnerOfList(user: User, listId: string): Promise<boolean> {
+    const list = await this.listRepository.findOneBy({ id: listId });
+    if (!list) {
+      return false;
+    }
+    return list.userId === user.id;
   }
 }

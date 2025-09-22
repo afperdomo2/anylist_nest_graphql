@@ -6,7 +6,7 @@ import { CreateListInput } from './create-list.input';
 
 @InputType()
 export class UpdateListInput extends PartialType(CreateListInput) {
-  @Field(() => ID)
+  @Field(() => ID, { description: 'ID de la lista a actualizar' })
   @IsUUID()
   @IsNotEmpty()
   id: string;
