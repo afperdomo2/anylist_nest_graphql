@@ -15,8 +15,11 @@ export class ItemListsResolver {
 
   // ! Queries
   @Query(() => ItemList, { name: 'itemList' })
-  findOne(@Args('id', { type: () => ID }, ParseUUIDPipe) id: string) {
-    return this.itemListsService.findOne(id);
+  findOne(
+    @Args('id', { type: () => ID }, ParseUUIDPipe) id: string,
+    @CurrentUserGql() user: User,
+  ): Promise<ItemList> {
+    return this.itemListsService.findOne(id, user);
   }
 
   // ! Mutations
@@ -27,19 +30,29 @@ export class ItemListsResolver {
   createItemList(
     @Args('createItemListInput') createItemListInput: CreateItemListInput,
     @CurrentUserGql() user: User,
-  ) {
+  ): Promise<ItemList> {
     return this.itemListsService.create(createItemListInput, user);
   }
 
-  @Mutation(() => ItemList)
+  @Mutation(() => ItemList, {
+    name: 'updateItemList',
+    description: 'Actualiza un itemList',
+  })
   updateItemList(
     @Args('updateItemListInput') updateItemListInput: UpdateItemListInput,
-  ) {
-    return this.itemListsService.update(updateItemListInput);
+    @CurrentUserGql() user: User,
+  ): Promise<ItemList> {
+    return this.itemListsService.update(updateItemListInput, user);
   }
 
-  @Mutation(() => ItemList)
-  removeItemList(@Args('id', { type: () => ID }, ParseUUIDPipe) id: string) {
-    return this.itemListsService.remove(id);
+  @Mutation(() => ItemList, {
+    name: 'removeItemList',
+    description: 'Elimina un itemList',
+  })
+  removeItemList(
+    @Args('id', { type: () => ID }, ParseUUIDPipe) id: string,
+    @CurrentUserGql() user: User,
+  ): Promise<ItemList> {
+    return this.itemListsService.remove(id, user);
   }
 }

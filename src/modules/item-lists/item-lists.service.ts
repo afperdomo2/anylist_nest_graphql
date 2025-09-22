@@ -3,10 +3,11 @@ import { Repository } from 'typeorm';
 import {
   Injectable,
   InternalServerErrorException,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
-
 import { InjectRepository } from '@nestjs/typeorm';
+
 import { PaginationArgs } from 'src/common/dto';
 import { paginate } from 'src/common/utils/pagination.util';
 import { List } from '../lists/entities/list.entity';
@@ -17,6 +18,8 @@ import { ItemList } from './entities/item-list.entity';
 
 @Injectable()
 export class ItemListsService {
+  private readonly logger = new Logger('ItemListsService');
+
   constructor(
     @InjectRepository(ItemList)
     private itemListRepository: Repository<ItemList>,
@@ -38,13 +41,21 @@ export class ItemListsService {
     try {
       const newList = this.itemListRepository.create(data);
       return await this.itemListRepository.save(newList);
-    } catch {
+    } catch (error) {
+      this.logger.error(error);
       throw new InternalServerErrorException('Error creating itemList');
     }
   }
 
-  update(data: UpdateItemListInput) {
-    return `This action updates a #${data.id} itemList`;
+  async update(data: UpdateItemListInput, user: User) {
+    const itemList = await this.findOne(data.id, user);
+    try {
+      this.itemListRepository.merge(itemList, data);
+      return await this.itemListRepository.save(itemList);
+    } catch (error) {
+      this.logger.error(error);
+      throw new InternalServerErrorException('Error updating itemList');
+    }
   }
 
   findAllByList(
@@ -60,9 +71,9 @@ export class ItemListsService {
     });
   }
 
-  async findOne(id: string): Promise<ItemList> {
+  async findOne(id: string, user: User): Promise<ItemList> {
     const itemList = await this.itemListRepository.findOne({
-      where: { id },
+      where: { id, list: { userId: user.id } },
       relations: ['item', 'list'],
     });
     if (!itemList) {
@@ -71,8 +82,10 @@ export class ItemListsService {
     return itemList;
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} itemList`;
+  async remove(id: string, user: User): Promise<ItemList> {
+    const itemList = await this.findOne(id, user);
+    await this.itemListRepository.delete(itemList);
+    return itemList;
   }
 
   async doesItemListExist(data: CreateItemListInput): Promise<boolean> {

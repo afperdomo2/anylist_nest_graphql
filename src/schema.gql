@@ -226,7 +226,11 @@ type Mutation {
 
   """Crea un nuevo itemList"""
   createItemList(createItemListInput: CreateItemListInput!): ItemList!
+
+  """Actualiza un itemList"""
   updateItemList(updateItemListInput: UpdateItemListInput!): ItemList!
+
+  """Elimina un itemList"""
   removeItemList(id: ID!): ItemList!
 
   """Ejecuta la semilla de datos"""
@@ -314,12 +318,6 @@ input CreateItemListInput {
 }
 
 input UpdateItemListInput {
-  """ID de la lista a la que pertenece el item"""
-  listId: ID
-
-  """ID del item que se va a agregar a la lista"""
-  itemId: ID
-
   """Cantidad del item"""
   quantity: Float = 0
 
