@@ -4,11 +4,13 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 
+import { ItemList } from 'src/modules/item-lists/entities/item-list.entity';
 import { User } from 'src/modules/users/entities/user.entity';
 
 @ObjectType()
@@ -35,4 +37,8 @@ export class List {
   @ManyToOne(() => User, (user) => user.lists)
   @JoinColumn({ name: 'user_id' })
   user: User;
+
+  // @Field(() => [ItemList], { description: 'Items de la lista' })
+  @OneToMany(() => ItemList, (itemList) => itemList.list)
+  itemLists: ItemList[];
 }

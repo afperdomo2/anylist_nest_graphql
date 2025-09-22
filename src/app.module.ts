@@ -8,6 +8,7 @@ import envConfig from './envs/envs';
 import { EnvsConfigModule } from './envs/envs.module';
 import { validationSchema } from './envs/validations/envs.validation';
 import { GraphqlModule } from './graphql/graphql.module';
+import { ItemListsModule } from './modules/item-lists/item-lists.module';
 import { ItemsModule } from './modules/items/items.module';
 import { ListsModule } from './modules/lists/lists.module';
 import { UsersModule } from './modules/users/users.module';
@@ -39,6 +40,7 @@ import { SeedModule } from './seed/seed.module';
     UsersModule,
     CommonModule,
     ListsModule,
+    ItemListsModule,
   ],
   controllers: [],
   providers: [],

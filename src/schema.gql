@@ -2,20 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type List {
-  """ID de la lista"""
-  id: ID!
-
-  """Nombre de la lista"""
-  name: String!
-
-  """Descripción de la lista"""
-  userId: String
-
-  """Usuario que creó la lista"""
-  user: User!
-}
-
 type User {
   """ID del item"""
   id: ID!
@@ -81,6 +67,43 @@ enum UserRole {
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
+
+type List {
+  """ID de la lista"""
+  id: ID!
+
+  """Nombre de la lista"""
+  name: String!
+
+  """Descripción de la lista"""
+  userId: String
+
+  """Usuario que creó la lista"""
+  user: User!
+}
+
+type ItemList {
+  """ID del item"""
+  id: ID!
+
+  """ID de la lista"""
+  listId: ID!
+
+  """ID del item"""
+  itemId: ID!
+
+  """Cantidad del item"""
+  quantity: Float!
+
+  """Indica si el item está completado"""
+  isCompleted: Boolean!
+
+  """Lista a la que pertenece el item"""
+  list: List
+
+  """Item que pertenece a la lista"""
+  item: Item
+}
 
 type Item {
   """ID del item"""
@@ -155,6 +178,8 @@ type Query {
 
   """Obtiene una lista por su ID (🔒Usuario autenticado)"""
   list(id: ID!): List!
+  itemLists: [ItemList!]!
+  itemList(id: Int!): ItemList!
 }
 
 type Mutation {
@@ -190,6 +215,11 @@ type Mutation {
 
   """Ejecuta la semilla de datos"""
   executeSeed: Boolean!
+
+  """Crea un nuevo itemList"""
+  createItemList(createItemListInput: CreateItemListInput!): ItemList!
+  updateItemList(updateItemListInput: UpdateItemListInput!): ItemList!
+  removeItemList(id: Int!): ItemList!
 }
 
 input CreateUserInput {
@@ -210,7 +240,7 @@ input UpdateUserInput {
   """Email del usuario"""
   email: String
 
-  """ID del usuario"""
+  """ID del usuario a actualizar"""
   id: ID!
 
   """Estado de actividad del usuario"""
@@ -240,6 +270,8 @@ input UpdateItemInput {
 
   """Unidad de medida del item"""
   unitOfMeasurement: String
+
+  """ID del item a actualizar"""
   id: ID!
 }
 
@@ -251,5 +283,38 @@ input CreateListInput {
 input UpdateListInput {
   """Nombre de la lista"""
   name: String
+
+  """ID de la lista a actualizar"""
+  id: ID!
+}
+
+input CreateItemListInput {
+  """ID de la lista a la que pertenece el item"""
+  listId: ID!
+
+  """ID del item que se va a agregar a la lista"""
+  itemId: ID!
+
+  """Cantidad del item"""
+  quantity: Float = 0
+
+  """¿Está completado el item?"""
+  isCompleted: Boolean = false
+}
+
+input UpdateItemListInput {
+  """ID de la lista a la que pertenece el item"""
+  listId: ID
+
+  """ID del item que se va a agregar a la lista"""
+  itemId: ID
+
+  """Cantidad del item"""
+  quantity: Float = 0
+
+  """¿Está completado el item?"""
+  isCompleted: Boolean = false
+
+  """ID del item-list a actualizar"""
   id: ID!
 }
