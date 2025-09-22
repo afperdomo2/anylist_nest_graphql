@@ -213,13 +213,13 @@ type Mutation {
   """Elimina una lista (🔒Usuario autenticado)"""
   removeList(id: ID!): List!
 
-  """Ejecuta la semilla de datos"""
-  executeSeed: Boolean!
-
   """Crea un nuevo itemList"""
   createItemList(createItemListInput: CreateItemListInput!): ItemList!
   updateItemList(updateItemListInput: UpdateItemListInput!): ItemList!
   removeItemList(id: Int!): ItemList!
+
+  """Ejecuta la semilla de datos"""
+  executeSeed: Boolean!
 }
 
 input CreateUserInput {
