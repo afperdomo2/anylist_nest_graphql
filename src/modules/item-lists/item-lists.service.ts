@@ -23,7 +23,7 @@ export class ItemListsService {
     private readonly listsService: ListsService,
   ) {}
 
-  async create(data: CreateItemListInput, user: User) {
+  async create(data: CreateItemListInput, user: User): Promise<ItemList> {
     const isOwner = await this.listsService.isUserOwnerOfList(
       user,
       data.listId,
@@ -43,6 +43,10 @@ export class ItemListsService {
     }
   }
 
+  update(data: UpdateItemListInput) {
+    return `This action updates a #${data.id} itemList`;
+  }
+
   findAllByList(
     list: List,
     paginationArgs: PaginationArgs,
@@ -56,15 +60,18 @@ export class ItemListsService {
     });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} itemList`;
+  async findOne(id: string): Promise<ItemList> {
+    const itemList = await this.itemListRepository.findOne({
+      where: { id },
+      relations: ['item', 'list'],
+    });
+    if (!itemList) {
+      throw new NotFoundException(`ItemList with ID ${id} not found`);
+    }
+    return itemList;
   }
 
-  update(id: number, updateItemListInput: UpdateItemListInput) {
-    return `This action updates a #${id} itemList`;
-  }
-
-  remove(id: number) {
+  remove(id: string) {
     return `This action removes a #${id} itemList`;
   }
 

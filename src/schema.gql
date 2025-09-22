@@ -190,7 +190,7 @@ type Query {
 
   """Obtiene una lista por su ID (🔒Usuario autenticado)"""
   list(id: ID!): List!
-  itemList(id: Int!): ItemList!
+  itemList(id: ID!): ItemList!
 }
 
 type Mutation {
@@ -227,7 +227,7 @@ type Mutation {
   """Crea un nuevo itemList"""
   createItemList(createItemListInput: CreateItemListInput!): ItemList!
   updateItemList(updateItemListInput: UpdateItemListInput!): ItemList!
-  removeItemList(id: Int!): ItemList!
+  removeItemList(id: ID!): ItemList!
 
   """Ejecuta la semilla de datos"""
   executeSeed: Boolean!

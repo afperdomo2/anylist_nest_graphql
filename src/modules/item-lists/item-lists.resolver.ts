@@ -1,5 +1,5 @@
-import { UseGuards } from '@nestjs/common';
-import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { ParseUUIDPipe, UseGuards } from '@nestjs/common';
+import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import { CurrentUserGql } from 'src/auth/decorators/graphql/current-user-gql.decorator';
 import { JwtAuthGuardGql } from 'src/auth/guards/graphql/jwt-auth-gql.guard';
@@ -15,7 +15,7 @@ export class ItemListsResolver {
 
   // ! Queries
   @Query(() => ItemList, { name: 'itemList' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  findOne(@Args('id', { type: () => ID }, ParseUUIDPipe) id: string) {
     return this.itemListsService.findOne(id);
   }
 
@@ -35,14 +35,11 @@ export class ItemListsResolver {
   updateItemList(
     @Args('updateItemListInput') updateItemListInput: UpdateItemListInput,
   ) {
-    return this.itemListsService.update(
-      updateItemListInput.id,
-      updateItemListInput,
-    );
+    return this.itemListsService.update(updateItemListInput);
   }
 
   @Mutation(() => ItemList)
-  removeItemList(@Args('id', { type: () => Int }) id: number) {
+  removeItemList(@Args('id', { type: () => ID }, ParseUUIDPipe) id: string) {
     return this.itemListsService.remove(id);
   }
 }
