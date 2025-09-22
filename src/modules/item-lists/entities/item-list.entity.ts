@@ -41,7 +41,7 @@ export class ItemList {
     nullable: true,
     description: 'Lista a la que pertenece el item',
   })
-  @ManyToOne(() => List, (list) => list.itemLists)
+  @ManyToOne(() => List, (list) => list.items)
   @JoinColumn({ name: 'list_id' })
   list: List;
 

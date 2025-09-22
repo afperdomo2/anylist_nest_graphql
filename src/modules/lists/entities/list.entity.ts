@@ -40,5 +40,5 @@ export class List {
 
   // @Field(() => [ItemList], { description: 'Items de la lista' })
   @OneToMany(() => ItemList, (itemList) => itemList.list)
-  itemLists: ItemList[];
+  items: ItemList[];
 }

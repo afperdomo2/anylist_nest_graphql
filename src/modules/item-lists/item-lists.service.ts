@@ -9,7 +9,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { ListsService } from '../lists/lists.service';
 import { User } from '../users/entities/user.entity';
-import { CreateItemListInput, UpdateItemListInput } from './dto/indext';
+import { CreateItemListInput, UpdateItemListInput } from './dto';
 import { ItemList } from './entities/item-list.entity';
 
 @Injectable()

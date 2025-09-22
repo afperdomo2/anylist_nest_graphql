@@ -4,7 +4,7 @@ import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CurrentUserGql } from 'src/auth/decorators/graphql/current-user-gql.decorator';
 import { JwtAuthGuardGql } from 'src/auth/guards/graphql/jwt-auth-gql.guard';
 import { User } from '../users/entities/user.entity';
-import { CreateItemListInput, UpdateItemListInput } from './dto/indext';
+import { CreateItemListInput, UpdateItemListInput } from './dto';
 import { ItemList } from './entities/item-list.entity';
 import { ItemListsService } from './item-lists.service';
 
