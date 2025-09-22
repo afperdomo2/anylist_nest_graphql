@@ -223,19 +223,86 @@ npm run test:e2e
 npm run test:cov
 ```
 
-## 📊 GraphQL Playground
+## 📊 API Endpoints
 
 Una vez iniciado el servidor, puedes acceder a:
 
 - **GraphQL Playground**: `http://localhost:3000/graphql`
 - **Swagger Documentation**: `http://localhost:3000/api/docs`
 
-### 🔍 Consultas de Ejemplo
+### 🌐Endpoints REST - Autenticación
 
-#### Autenticación
+La aplicación incluye endpoints REST para autenticación además de GraphQL:
+
+#### 📝 Registro de Usuario
+
+```http
+POST /api/auth/singup
+Content-Type: application/json
+
+{
+  "fullName": "Juan Perez",
+  "email": "juan@example.com",
+  "password": "Password123"
+}
+```
+
+**Respuesta:**
+
+```json
+{
+  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "user": {
+    "id": "uuid-del-usuario",
+    "fullName": "Juan Perez",
+    "email": "juan@example.com",
+    "roles": ["user"],
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z"
+  }
+}
+```
+
+#### 🔑 Inicio de Sesión
+
+```http
+POST /api/auth/login
+Content-Type: application/json
+
+{
+  "email": "juan@example.com",
+  "password": "Password123"
+}
+```
+
+**Respuesta:**
+
+```json
+{
+  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "user": {
+    "id": "uuid-del-usuario",
+    "fullName": "Juan Perez",
+    "email": "juan@example.com",
+    "roles": ["user"],
+    "isActive": true
+  }
+}
+```
+
+### 🔍 Consultas GraphQL - Ejemplos
+
+> **📌 Nota:** Para consultas GraphQL que requieren autenticación, incluye el token JWT en el header:
+>
+> ```
+> Authorization: Bearer tu_token_jwt_aqui
+> ```
+
+#### Gestión de Usuarios (GraphQL)
 
 ```graphql
-# Registro de usuario
+# Crear usuario (Solo Admin)
 mutation {
   createUser(createUserInput: {
     fullName: "Juan Perez"
@@ -312,6 +379,24 @@ mutation {
 ```
 
 ## 🔒 Sistema de Autenticación
+
+### 🔄 Autenticación Híbrida (REST + GraphQL)
+
+La aplicación implementa un sistema híbrido que combina:
+
+- **🌐 Endpoints REST**: Para registro e inicio de sesión (`/api/auth/*`)
+- **📊 GraphQL**: Para todas las demás operaciones CRUD
+
+#### 🚀 Flujo de Autenticación
+
+1. **Registro/Login** → Usar endpoints REST para obtener JWT
+2. **Operaciones** → Usar GraphQL con el token JWT en headers
+3. **Headers requeridos**:
+
+   ```http
+   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+   Content-Type: application/json
+   ```
 
 ### Roles de Usuario
 
