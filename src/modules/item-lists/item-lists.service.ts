@@ -40,7 +40,8 @@ export class ItemListsService {
     }
     try {
       const newList = this.itemListRepository.create(data);
-      return await this.itemListRepository.save(newList);
+      await this.itemListRepository.save(newList);
+      return await this.findOne(newList.id, user);
     } catch (error) {
       this.logger.error(error);
       throw new InternalServerErrorException('Error creating itemList');
